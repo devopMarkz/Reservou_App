@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: api-reservou
+  profiles:
+    active: hmg
+  jpa:
+    open-in-view: false
