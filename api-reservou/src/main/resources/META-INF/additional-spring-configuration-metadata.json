@@ -1,0 +1,18 @@
+{
+  "properties": [
+    {
+      "name": "token.secret.signature",
+      "type": "java.lang.String",
+      "description": "Assinatura secreta do token JWT."
+    },
+    {
+      "name": "token.expiration-time",
+      "type": "java.lang.String",
+      "description": "Tempo em horas de expiração do token JWT."
+    },
+    {
+      "name": "token.refresh-expiration-time",
+      "type": "java.lang.String",
+      "description": "Tempo em horas de expiração do refresh token."
+    }
+  ] }

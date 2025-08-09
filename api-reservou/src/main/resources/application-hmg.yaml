@@ -18,3 +18,9 @@ spring:
     url: jdbc:postgresql://localhost:5432/reservou_db
     schemas:
       - reservou
+
+token:
+  secret:
+    signature: ${SECRET_SIGNATURE}
+  expiration-time: 4
+  refresh-expiration-time: 8
