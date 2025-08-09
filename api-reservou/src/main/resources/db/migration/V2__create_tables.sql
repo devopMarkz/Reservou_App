@@ -4,8 +4,9 @@ CREATE TABLE IF NOT EXISTS reservou.tb_usuarios (
     nome VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     senha VARCHAR(255) NOT NULL,
-    perfil VARCHAR(50) NOT NULL DEFAULT 'USUARIO_COMUM',
-    ativo BOOLEAN NOT NULL DEFAULT TRUE
+    perfil VARCHAR(50) NOT NULL DEFAULT 'ROLE_USUARIO_COMUM',
+    ativo BOOLEAN NOT NULL DEFAULT TRUE,
+    refresh_token_jti TEXT
 );
 
 -- Tabela "tb_estabelecimentos"
