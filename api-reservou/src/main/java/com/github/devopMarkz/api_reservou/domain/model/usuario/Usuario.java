@@ -36,10 +36,13 @@ public class Usuario implements Serializable, UserDetails {
 
     @Column(name = "perfil", nullable = false)
     @Enumerated(EnumType.STRING)
-    private Perfil perfil = Perfil.USUARIO_COMUM;
+    private Perfil perfil = Perfil.ROLE_USUARIO_COMUM;
 
     @Column(name = "ativo", nullable = false)
     private Boolean ativo = Boolean.TRUE;
+
+    @Column(name = "refresh_token_jti")
+    private String refreshTokenJti;
 
     @Setter(AccessLevel.NONE)
     @OneToMany(mappedBy = "dono", orphanRemoval = true, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})

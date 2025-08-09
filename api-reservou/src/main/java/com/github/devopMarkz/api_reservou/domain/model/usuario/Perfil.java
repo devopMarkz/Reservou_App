@@ -2,9 +2,9 @@ package com.github.devopMarkz.api_reservou.domain.model.usuario;
 
 public enum Perfil {
 
-    DONO("Dono"),
-    USUARIO_COMUM("Usuário Comum"),
-    ADMINISTRADOR("Administrador");
+    ROLE_DONO("Dono"),
+    ROLE_USUARIO_COMUM("Usuário Comum"),
+    ROLE_ADMINISTRADOR("Administrador");
 
     private String descricao;
 
