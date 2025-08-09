@@ -60,23 +60,23 @@ public class Estabelecimento implements Serializable {
     private LocalDateTime dataAtualizacao;
 
     public Estabelecimento() {
-        this.notaMedia = this.calculaMedia();
+        this.calculaMedia();
     }
 
     public Estabelecimento(String nome, String endereco, Usuario dono) {
         this.nome = nome;
         this.endereco = endereco;
         this.dono = dono;
-        this.notaMedia = this.calculaMedia();
+        this.calculaMedia();
     }
 
-    private Double calculaMedia() {
+    private void calculaMedia() {
         if (avaliacoes.isEmpty()) {
-            return 0.0;
+            this.notaMedia = 0.0;
         }
 
         Double soma = avaliacoes.stream().map(Avaliacao::getNota).reduce(0.0, Double::sum);
-        return soma / avaliacoes.size();
+        this.notaMedia = soma / avaliacoes.size();
     }
 
     public Set<Quadra> getQuadras() {
@@ -93,5 +93,6 @@ public class Estabelecimento implements Serializable {
 
     public void adicionaAvaliacao(Avaliacao avaliacao) {
         this.avaliacoes.add(avaliacao);
+        this.calculaMedia();
     }
 }
