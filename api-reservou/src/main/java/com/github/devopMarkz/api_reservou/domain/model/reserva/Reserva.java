@@ -39,7 +39,6 @@ public class Reserva {
     @OneToMany(mappedBy = "reserva", cascade = CascadeType.ALL)
     private Set<Pagamento> pagamentos = new HashSet<>();
 
-    @CreationTimestamp
     @Column(name = "data_reserva", nullable = false)
     private LocalDateTime dataReserva;
 

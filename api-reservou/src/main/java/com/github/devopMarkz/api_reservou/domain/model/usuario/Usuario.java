@@ -14,7 +14,7 @@ import java.util.*;
 @Setter
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-@Builder
+@Builder(access = AccessLevel.PUBLIC)
 @Entity
 @Table(schema = "reservou", name = "tb_usuarios")
 public class Usuario implements Serializable, UserDetails {
