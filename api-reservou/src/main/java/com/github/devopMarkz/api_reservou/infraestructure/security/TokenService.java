@@ -5,6 +5,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.github.devopMarkz.api_reservou.domain.model.usuario.Usuario;
 import com.github.devopMarkz.api_reservou.domain.repository.usuario.UsuarioRepository;
@@ -67,7 +68,7 @@ public class TokenService {
 
             return usuarioRepository.findByEmail(email)
                     .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado!"));
-        } catch (JWTCreationException exception) {
+        } catch (JWTCreationException | TokenExpiredException exception) {
             throw new TokenInvalidoException("Token expirado ou inválido");
         }
     }
@@ -89,8 +90,7 @@ public class TokenService {
 
             if (usuario.getRefreshTokenJti() == null) {
                 usuario.setRefreshTokenJti(jti);
-                usuarioRepository.save(usuario);  // Atualiza o usuário com o novo jti
-                System.out.println("Novo jti gerado e armazenado para o usuário: " + jti);
+                usuarioRepository.save(usuario);
             } else {
                 if (!jti.equals(usuario.getRefreshTokenJti())) {
                     throw new TokenInvalidoException("Refresh token revogado!");
@@ -138,7 +138,7 @@ public class TokenService {
                     .withExpiresAt(expiration())
                     .sign(algorithm);
         } catch (JWTCreationException e) {
-            throw new RuntimeException("Erro ao criar o token JWT", e);
+            throw new TokenInvalidoException("Erro ao criar o token JWT");
         }
     }
 
@@ -158,7 +158,7 @@ public class TokenService {
                     .sign(algorithm);
 
         } catch (JWTCreationException e) {
-            throw new RuntimeException("Erro ao criar o Refresh Token", e);
+            throw new TokenInvalidoException("Erro ao criar o Refresh Token");
         }
     }
 

@@ -1,5 +1,6 @@
 package com.github.devopMarkz.api_reservou.infraestructure.security;
 
+import com.github.devopMarkz.api_reservou.infraestructure.exception.TokenInvalidoException;
 import com.github.devopMarkz.api_reservou.infraestructure.exception.handlers.CustomAuthenticationEntryPoint;
 import com.github.devopMarkz.api_reservou.infraestructure.exception.UsuarioInativoException;
 import jakarta.servlet.FilterChain;
@@ -40,6 +41,11 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
+        if (request.getRequestURI().equals("/auth/login") || request.getRequestURI().equals("/auth/refresh")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         try {
             String token = extraiTokenDoHeader(request);
 
@@ -57,7 +63,7 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
                     throw new UsuarioInativoException("Usuário inativo");
                 }
             }
-        } catch (UsuarioInativoException e) {
+        } catch (UsuarioInativoException | TokenInvalidoException e) {
             customAuthenticationEntryPoint.commence(request, response, e);
             return;
         }

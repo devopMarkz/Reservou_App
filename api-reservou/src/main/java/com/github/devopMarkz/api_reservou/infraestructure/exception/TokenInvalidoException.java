@@ -1,6 +1,8 @@
 package com.github.devopMarkz.api_reservou.infraestructure.exception;
 
-public class TokenInvalidoException extends RuntimeException {
+import org.springframework.security.core.AuthenticationException;
+
+public class TokenInvalidoException extends AuthenticationException {
     public TokenInvalidoException(String message) {
         super(message);
     }

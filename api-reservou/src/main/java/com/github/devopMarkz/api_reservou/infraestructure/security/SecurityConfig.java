@@ -1,7 +1,7 @@
 package com.github.devopMarkz.api_reservou.infraestructure.security;
 
 import com.github.devopMarkz.api_reservou.infraestructure.exception.handlers.CustomAuthenticationEntryPoint;
-import com.github.devopMarkz.api_reservou.utils.GerenciadorDeRoles;
+import com.github.devopMarkz.api_reservou.utils.GerenciadorDePermissoes;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -44,7 +44,7 @@ public class SecurityConfig {
                             "/swagger-ui/**",
                             "/webjars/**",
                             "/actuator/**"
-                    ).hasRole(GerenciadorDeRoles.ROLE_ADMINISTRADOR);
+                    ).hasRole(GerenciadorDePermissoes.ROLE_ADMINISTRADOR);
 
                     auth.requestMatchers(HttpMethod.POST, "/auth/login", "/auth/refresh").permitAll();
 
