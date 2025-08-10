@@ -1,4 +1,4 @@
-package com.github.devopMarkz.api_reservou.application.autenticacao;
+package com.github.devopMarkz.api_reservou.application.autenticacao.service;
 
 import com.github.devopMarkz.api_reservou.domain.model.usuario.Usuario;
 import com.github.devopMarkz.api_reservou.infraestructure.exception.TokenInvalidoException;

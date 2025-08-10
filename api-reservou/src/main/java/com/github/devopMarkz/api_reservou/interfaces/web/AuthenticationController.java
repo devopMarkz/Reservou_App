@@ -1,6 +1,6 @@
 package com.github.devopMarkz.api_reservou.interfaces.web;
 
-import com.github.devopMarkz.api_reservou.application.autenticacao.AutenticacaoService;
+import com.github.devopMarkz.api_reservou.application.autenticacao.service.AutenticacaoService;
 import com.github.devopMarkz.api_reservou.interfaces.dto.login.LoginDTO;
 import com.github.devopMarkz.api_reservou.interfaces.dto.token.TokenDTO;
 import org.springframework.http.ResponseEntity;
