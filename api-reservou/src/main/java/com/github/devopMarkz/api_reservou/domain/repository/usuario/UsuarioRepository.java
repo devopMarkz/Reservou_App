@@ -20,4 +20,15 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     Page<Usuario> findByNomeContainingIgnoreCase(String nome, Pageable pageable);
 
+    @Query("SELECT u FROM Usuario u WHERE 1 = 1 " +
+            "AND (:nome IS NULL OR u.nome LIKE %:nome%) " +
+            "AND (:email IS NULL OR u.email LIKE %:email%) " +
+            "AND (:perfil IS NULL OR u.perfil = :perfil) " +
+            "AND (:ativo IS NULL OR u.ativo = :ativo)")
+    Page<Usuario> findByFilters(@Param("nome") String nome,
+                                @Param("email") String email,
+                                @Param("perfil") String perfil,
+                                @Param("ativo") Boolean ativo,
+                                Pageable pageable);
+
 }
