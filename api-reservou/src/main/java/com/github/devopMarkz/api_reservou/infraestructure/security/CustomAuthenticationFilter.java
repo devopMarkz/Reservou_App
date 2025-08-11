@@ -41,10 +41,10 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        if (request.getRequestURI().equals("/auth/login") || request.getRequestURI().equals("/auth/refresh")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
+//        if (request.getRequestURI().equals("/auth/login") || request.getRequestURI().equals("/auth/refresh")) {
+//            filterChain.doFilter(request, response);
+//            return;
+//        }
 
         try {
             String token = extraiTokenDoHeader(request);

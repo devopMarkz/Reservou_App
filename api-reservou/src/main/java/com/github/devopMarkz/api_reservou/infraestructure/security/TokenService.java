@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
@@ -163,11 +164,17 @@ public class TokenService {
     }
 
     private Instant expiration() {
-        return Instant.now().plus(tempoExpiracaoToken, ChronoUnit.HOURS);
+        return Instant.now()
+                .plus(tempoExpiracaoToken, ChronoUnit.HOURS)
+                .atZone(ZoneId.systemDefault())
+                .toInstant();
     }
 
     private Instant refreshExpiration() {
-        return Instant.now().plus(tempoExpiracaoRefreshToken, ChronoUnit.HOURS);
+        return Instant.now()
+                .plus(tempoExpiracaoRefreshToken, ChronoUnit.HOURS)
+                .atZone(ZoneId.systemDefault())
+                .toInstant();
     }
 
 }

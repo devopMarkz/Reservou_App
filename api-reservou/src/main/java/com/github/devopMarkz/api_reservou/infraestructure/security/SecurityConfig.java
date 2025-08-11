@@ -48,7 +48,7 @@ public class SecurityConfig {
                             "/actuator/**"
                     ).hasRole(GerenciadorDePermissoes.ROLE_ADMINISTRADOR);
 
-                    auth.requestMatchers(HttpMethod.POST, "/auth/login", "/auth/refresh").permitAll();
+                    auth.requestMatchers(HttpMethod.POST, "/auth/**").permitAll();
 
                     auth.anyRequest().authenticated();
                 })
