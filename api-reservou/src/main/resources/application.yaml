@@ -5,3 +5,7 @@ spring:
     active: hmg
   jpa:
     open-in-view: false
+
+server:
+  servlet:
+    context-path: /api-reservou-1.0

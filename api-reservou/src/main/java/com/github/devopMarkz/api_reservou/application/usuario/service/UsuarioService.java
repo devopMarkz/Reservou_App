@@ -1,6 +1,7 @@
 package com.github.devopMarkz.api_reservou.application.usuario.service;
 
 import com.github.devopMarkz.api_reservou.application.usuario.mapper.UsuarioMapper;
+import com.github.devopMarkz.api_reservou.domain.model.usuario.Perfil;
 import com.github.devopMarkz.api_reservou.domain.model.usuario.Usuario;
 import com.github.devopMarkz.api_reservou.domain.repository.usuario.UsuarioRepository;
 import com.github.devopMarkz.api_reservou.infraestructure.exception.EntidadeInexistenteException;
@@ -58,7 +59,7 @@ public class UsuarioService {
 
         BeanUtils.copyProperties(usuarioAtualizado, usuario, "id", "perfil", "ativo", "refreshTokenJti");
 
-        usuarioRepository.save(usuarioAtualizado);
+        usuarioRepository.save(usuario);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -67,6 +68,16 @@ public class UsuarioService {
             throw new EntidadeInexistenteException("Usuário inexistente.");
         }
         usuarioRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void desativarUsuario(Long id){
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new EntidadeInexistenteException("Usuário inexistente."));
+
+        usuario.desativar();
+
+        usuarioRepository.save(usuario);
     }
 
 }

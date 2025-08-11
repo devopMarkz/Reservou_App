@@ -12,9 +12,7 @@ import java.util.*;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-@Builder(access = AccessLevel.PUBLIC)
 @Entity
 @Table(schema = "reservou", name = "tb_usuarios")
 public class Usuario implements Serializable, UserDetails {
@@ -48,7 +46,8 @@ public class Usuario implements Serializable, UserDetails {
     @OneToMany(mappedBy = "dono", orphanRemoval = true, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private Set<Estabelecimento> estabelecimentos = new HashSet<>();
 
-    public Usuario() {}
+    public Usuario() {
+    }
 
     public Usuario(String nome, String email, String senha) {
         this.nome = nome;
@@ -65,6 +64,10 @@ public class Usuario implements Serializable, UserDetails {
 
     public Set<Estabelecimento> getEstabelecimentos() {
         return Collections.unmodifiableSet(estabelecimentos);
+    }
+
+    public void desativar(){
+        this.ativo = Boolean.FALSE;
     }
 
     @Override
