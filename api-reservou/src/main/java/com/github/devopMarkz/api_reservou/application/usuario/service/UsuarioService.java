@@ -1,10 +1,10 @@
 package com.github.devopMarkz.api_reservou.application.usuario.service;
 
 import com.github.devopMarkz.api_reservou.application.usuario.mapper.UsuarioMapper;
-import com.github.devopMarkz.api_reservou.domain.model.usuario.Perfil;
 import com.github.devopMarkz.api_reservou.domain.model.usuario.Usuario;
 import com.github.devopMarkz.api_reservou.domain.repository.usuario.UsuarioRepository;
 import com.github.devopMarkz.api_reservou.infraestructure.exception.EntidadeInexistenteException;
+import com.github.devopMarkz.api_reservou.infraestructure.exception.ViolacaoUnicidadeChaveException;
 import com.github.devopMarkz.api_reservou.interfaces.dto.usuario.UsuarioRequestDTO;
 import com.github.devopMarkz.api_reservou.interfaces.dto.usuario.UsuarioResponseDTO;
 import org.springframework.beans.BeanUtils;
@@ -54,6 +54,8 @@ public class UsuarioService {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new EntidadeInexistenteException("Usuário não encontrado."));
 
+        validarViolacaoDeFK(requestDTO.getEmail());
+
         Usuario usuarioAtualizado = usuarioMapper.toUsuario(requestDTO);
         usuarioAtualizado.setSenha(passwordEncoder.encode(requestDTO.getSenha()));
 
@@ -78,6 +80,12 @@ public class UsuarioService {
         usuario.desativar();
 
         usuarioRepository.save(usuario);
+    }
+
+    private void validarViolacaoDeFK(String email) {
+        if(usuarioRepository.existsByEmail(email)) {
+            throw new ViolacaoUnicidadeChaveException(email + " já está sendo utilizado.");
+        }
     }
 
 }

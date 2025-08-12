@@ -3,6 +3,7 @@ package com.github.devopMarkz.api_reservou.infraestructure.exception.handlers;
 import com.github.devopMarkz.api_reservou.infraestructure.exception.EntidadeInexistenteException;
 import com.github.devopMarkz.api_reservou.infraestructure.exception.TokenInvalidoException;
 import com.github.devopMarkz.api_reservou.infraestructure.exception.UsuarioInativoException;
+import com.github.devopMarkz.api_reservou.infraestructure.exception.ViolacaoUnicidadeChaveException;
 import com.github.devopMarkz.api_reservou.interfaces.dto.erro.ErroDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -44,6 +45,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(EntidadeInexistenteException.class)
     public ResponseEntity<ErroDTO> handlerEntidadeInexistente(EntidadeInexistenteException e, HttpServletRequest request) {
         HttpStatus status = HttpStatus.NOT_FOUND;
+        List<String> erros = List.of(e.getMessage());
+        ErroDTO erroDTO = new ErroDTO(Instant.now().toString(), status.value(), request.getRequestURI(), erros);
+        return ResponseEntity.status(status).body(erroDTO);
+    }
+
+    @ExceptionHandler(ViolacaoUnicidadeChaveException.class)
+    public ResponseEntity<ErroDTO> handlerViolacaoUnicidadeChave(ViolacaoUnicidadeChaveException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.CONFLICT;
         List<String> erros = List.of(e.getMessage());
         ErroDTO erroDTO = new ErroDTO(Instant.now().toString(), status.value(), request.getRequestURI(), erros);
         return ResponseEntity.status(status).body(erroDTO);
