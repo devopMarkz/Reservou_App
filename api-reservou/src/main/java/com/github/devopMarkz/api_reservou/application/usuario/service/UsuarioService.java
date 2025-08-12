@@ -10,6 +10,7 @@ import com.github.devopMarkz.api_reservou.interfaces.dto.usuario.UsuarioResponse
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedModel;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,9 +39,9 @@ public class UsuarioService {
     }
 
     @Transactional(readOnly = true)
-    public Page<UsuarioResponseDTO> buscarUsuarios(String nome, String email, String perfil, Boolean ativo, Pageable pageable) {
+    public PagedModel<UsuarioResponseDTO> buscarUsuarios(String nome, String email, String perfil, Boolean ativo, Pageable pageable) {
         Page<Usuario> usuarios = usuarioRepository.findByFilters(nome, email, perfil, ativo, pageable);
-        return usuarios.map(usuarioMapper::toUsuarioResponseDTO);
+        return new PagedModel<>(usuarios.map(usuarioMapper::toUsuarioResponseDTO));
     }
 
     @Transactional(readOnly = true)

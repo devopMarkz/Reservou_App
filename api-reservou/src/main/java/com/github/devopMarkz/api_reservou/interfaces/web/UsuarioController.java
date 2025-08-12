@@ -7,6 +7,7 @@ import com.github.devopMarkz.api_reservou.utils.GerenciadorDePermissoes;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +42,7 @@ public class UsuarioController {
 
     @GetMapping
     @PreAuthorize(GerenciadorDePermissoes.ROLE_ADMINISTRADOR)
-    public ResponseEntity<Page<UsuarioResponseDTO>> buscarComFiltros(
+    public ResponseEntity<PagedModel<UsuarioResponseDTO>> buscarComFiltros(
             @RequestParam(name = "nome", required = false) String nome,
             @RequestParam(name = "email", required = false) String email,
             @RequestParam(name = "perfil", required = false) String perfil,
@@ -50,7 +51,7 @@ public class UsuarioController {
             @RequestParam(name = "pageSize", required = false, defaultValue = "20") int pageSize
     ){
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        Page<UsuarioResponseDTO> usuarios = usuarioService.buscarUsuarios(nome, email, perfil, ativo, pageable);
+        PagedModel<UsuarioResponseDTO> usuarios = usuarioService.buscarUsuarios(nome, email, perfil, ativo, pageable);
         return ResponseEntity.ok(usuarios);
     }
 
