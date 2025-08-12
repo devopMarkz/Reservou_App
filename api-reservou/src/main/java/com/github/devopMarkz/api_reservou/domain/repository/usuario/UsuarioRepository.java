@@ -13,7 +13,7 @@ import java.util.Optional;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
-    @Query("SELECT obj FROM Usuario obj WHERE obj.email = :email")
+    @Query("SELECT obj FROM Usuario obj WHERE UPPER(obj.email) = UPPER(:email)")
     Optional<Usuario> findByEmail(@Param("email") String email);
 
     boolean existsByEmail(String email);
@@ -21,8 +21,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     Page<Usuario> findByNomeContainingIgnoreCase(String nome, Pageable pageable);
 
     @Query("SELECT u FROM Usuario u WHERE 1 = 1 " +
-            "AND (:nome IS NULL OR u.nome LIKE %:nome%) " +
-            "AND (:email IS NULL OR u.email LIKE %:email%) " +
+            "AND (:nome IS NULL OR u.nome ILIKE %:nome%) " +
+            "AND (:email IS NULL OR u.email ILIKE %:email%) " +
             "AND (:perfil IS NULL OR u.perfil = :perfil) " +
             "AND (:ativo IS NULL OR u.ativo = :ativo)")
     Page<Usuario> findByFilters(@Param("nome") String nome,

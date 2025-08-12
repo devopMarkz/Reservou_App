@@ -15,7 +15,7 @@ import java.util.*;
 @EqualsAndHashCode(of = "id")
 @Entity
 @Table(schema = "reservou", name = "tb_usuarios")
-public class Usuario implements Serializable, UserDetails {
+public class Usuario implements UserDetails {
 
     private static final long serialVersionUID = 1L;
 
