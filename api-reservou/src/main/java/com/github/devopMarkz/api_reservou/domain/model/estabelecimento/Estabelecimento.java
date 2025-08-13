@@ -21,7 +21,7 @@ import java.util.Set;
 @Setter
 @EqualsAndHashCode(of = "id")
 @Entity
-@Table(schema = "reservou", name = "tb_estabelecimentos")
+@Table(name = "tb_estabelecimentos")
 public class Estabelecimento implements Serializable {
 
     private static final long serialVersionUID = 1L;

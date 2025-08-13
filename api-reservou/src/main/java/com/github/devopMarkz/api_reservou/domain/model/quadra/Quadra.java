@@ -17,7 +17,7 @@ import java.util.Set;
 @Setter
 @EqualsAndHashCode(of = "id")
 @Entity
-@Table(schema = "reservou", name = "tb_quadras")
+@Table(name = "tb_quadras")
 public class Quadra implements Serializable {
 
     private static final long serialVersionUID = 1L;

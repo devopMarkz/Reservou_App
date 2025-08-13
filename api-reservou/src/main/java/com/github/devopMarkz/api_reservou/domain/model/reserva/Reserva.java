@@ -19,7 +19,7 @@ import java.util.Set;
 @Setter
 @EqualsAndHashCode(of = "id")
 @Entity
-@Table(schema = "reservou", name = "tb_reservas")
+@Table(name = "tb_reservas")
 public class Reserva {
 
     @Id

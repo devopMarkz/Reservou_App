@@ -20,7 +20,7 @@ import java.util.Set;
 @Setter
 @EqualsAndHashCode(of = "id")
 @Entity
-@Table(schema = "reservou", name = "tb_horarios")
+@Table(name = "tb_horarios")
 public class Horario implements Serializable {
 
     private static final long serialVersionUID = 1L;

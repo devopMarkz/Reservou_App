@@ -19,8 +19,6 @@ spring:
     user: postgres
     password: aluno
     url: jdbc:postgresql://localhost:5432/reservou_db
-    schemas:
-      - reservou
 
 token:
   secret:

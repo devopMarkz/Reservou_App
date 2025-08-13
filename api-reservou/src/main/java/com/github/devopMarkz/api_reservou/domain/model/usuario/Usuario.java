@@ -14,7 +14,7 @@ import java.util.*;
 @Setter
 @EqualsAndHashCode(of = "id")
 @Entity
-@Table(schema = "reservou", name = "tb_usuarios")
+@Table(name = "tb_usuarios")
 public class Usuario implements UserDetails {
 
     private static final long serialVersionUID = 1L;
