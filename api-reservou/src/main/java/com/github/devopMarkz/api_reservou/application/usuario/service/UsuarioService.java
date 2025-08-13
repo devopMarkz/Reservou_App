@@ -60,7 +60,7 @@ public class UsuarioService {
         Usuario usuarioAtualizado = usuarioMapper.toUsuario(requestDTO);
         usuarioAtualizado.setSenha(passwordEncoder.encode(requestDTO.getSenha()));
 
-        BeanUtils.copyProperties(usuarioAtualizado, usuario, "id", "perfil", "ativo", "refreshTokenJti");
+        BeanUtils.copyProperties(usuarioAtualizado, usuario, "id", "perfil", "ativo", "refreshTokenJti", "plano");
 
         usuarioRepository.save(usuario);
     }

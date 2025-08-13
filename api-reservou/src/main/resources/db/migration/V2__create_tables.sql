@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS reservou.tb_usuarios (
     email VARCHAR(255) NOT NULL UNIQUE,
     senha VARCHAR(255) NOT NULL,
     perfil VARCHAR(50) NOT NULL DEFAULT 'ROLE_USUARIO_COMUM',
+    plano VARCHAR(50) NOT NULL DEFAULT 'GRATUITO',
     ativo BOOLEAN NOT NULL DEFAULT TRUE,
     refresh_token_jti TEXT
 );

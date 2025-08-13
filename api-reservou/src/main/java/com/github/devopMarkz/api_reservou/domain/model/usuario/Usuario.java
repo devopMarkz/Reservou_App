@@ -36,6 +36,10 @@ public class Usuario implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Perfil perfil = Perfil.ROLE_USUARIO_COMUM;
 
+    @Column(name = "plano", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Plano plano = Plano.GRATUITO;
+
     @Column(name = "ativo", nullable = false)
     private Boolean ativo = Boolean.TRUE;
 
@@ -60,6 +64,14 @@ public class Usuario implements UserDetails {
         this.email = email;
         this.senha = senha;
         this.perfil = perfil;
+    }
+
+    public Usuario(Long id, String nome, String email, Perfil perfil, Plano plano) {
+        this.id = id;
+        this.nome = nome;
+        this.email = email;
+        this.perfil = perfil;
+        this.plano = plano;
     }
 
     public Set<Estabelecimento> getEstabelecimentos() {

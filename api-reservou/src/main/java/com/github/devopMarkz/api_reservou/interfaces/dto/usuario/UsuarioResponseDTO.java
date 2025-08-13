@@ -17,6 +17,7 @@ public class UsuarioResponseDTO {
     private String nome;
     private String email;
     private String perfil;
+    private String plano;
     private Boolean ativo;
     private Set<Long> estabelecimentosIds;
 
