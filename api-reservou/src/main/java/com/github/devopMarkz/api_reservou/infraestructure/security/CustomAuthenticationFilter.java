@@ -1,5 +1,6 @@
 package com.github.devopMarkz.api_reservou.infraestructure.security;
 
+import com.github.devopMarkz.api_reservou.application.autenticacao.TokenService;
 import com.github.devopMarkz.api_reservou.infraestructure.exception.TokenInvalidoException;
 import com.github.devopMarkz.api_reservou.infraestructure.exception.handlers.CustomAuthenticationEntryPoint;
 import com.github.devopMarkz.api_reservou.infraestructure.exception.UsuarioInativoException;

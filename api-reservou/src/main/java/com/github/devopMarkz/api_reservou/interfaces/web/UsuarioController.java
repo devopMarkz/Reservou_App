@@ -1,10 +1,9 @@
 package com.github.devopMarkz.api_reservou.interfaces.web;
 
-import com.github.devopMarkz.api_reservou.application.usuario.service.UsuarioService;
+import com.github.devopMarkz.api_reservou.application.usuario.UsuarioService;
 import com.github.devopMarkz.api_reservou.interfaces.dto.usuario.UsuarioRequestDTO;
 import com.github.devopMarkz.api_reservou.interfaces.dto.usuario.UsuarioResponseDTO;
 import com.github.devopMarkz.api_reservou.utils.GerenciadorDePermissoes;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedModel;

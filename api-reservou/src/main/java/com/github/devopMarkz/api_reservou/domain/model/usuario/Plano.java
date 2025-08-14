@@ -7,13 +7,13 @@ public enum Plano {
     PREMIUM(20),
     ILIMITADO(Integer.MAX_VALUE);
 
-    public int valor;
+    public final int quantidadeEstabelecimentos;
 
-    Plano(int valor) {
-        this.valor = valor;
+    Plano(int quantidadeEstabelecimentos) {
+        this.quantidadeEstabelecimentos = quantidadeEstabelecimentos;
     }
 
-    public int getValor() {
-        return valor;
+    public int getQuantidadeEstabelecimentos() {
+        return quantidadeEstabelecimentos;
     }
 }

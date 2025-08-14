@@ -1,4 +1,4 @@
-package com.github.devopMarkz.api_reservou.infraestructure.security;
+package com.github.devopMarkz.api_reservou.application.autenticacao;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;

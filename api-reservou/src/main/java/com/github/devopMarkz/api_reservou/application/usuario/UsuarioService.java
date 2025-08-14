@@ -1,4 +1,4 @@
-package com.github.devopMarkz.api_reservou.application.usuario.service;
+package com.github.devopMarkz.api_reservou.application.usuario;
 
 import com.github.devopMarkz.api_reservou.application.usuario.mapper.UsuarioMapper;
 import com.github.devopMarkz.api_reservou.domain.model.usuario.Usuario;

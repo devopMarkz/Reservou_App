@@ -16,7 +16,7 @@ public class EstabelecimentoRequestDTO {
     @NotNull(message = "Endereço precisa ser informado.")
     private EnderecoDTO endereco;
 
-    @NotNull(message = "Dono do estabelecimento precisa ser informado.")
-    @Positive(message = "ID precisa ser um número maior que 0.")
-    private Long idDono;
+//    @NotNull(message = "Dono do estabelecimento precisa ser informado.")
+//    @Positive(message = "ID precisa ser um número maior que 0.")
+//    private Long idDono;
 }

@@ -1,8 +1,7 @@
-package com.github.devopMarkz.api_reservou.application.autenticacao.service;
+package com.github.devopMarkz.api_reservou.application.autenticacao;
 
 import com.github.devopMarkz.api_reservou.domain.model.usuario.Usuario;
 import com.github.devopMarkz.api_reservou.infraestructure.exception.TokenInvalidoException;
-import com.github.devopMarkz.api_reservou.infraestructure.security.TokenService;
 import com.github.devopMarkz.api_reservou.interfaces.dto.login.LoginDTO;
 import com.github.devopMarkz.api_reservou.interfaces.dto.token.TokenDTO;
 import org.springframework.security.authentication.AuthenticationManager;
