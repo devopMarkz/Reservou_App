@@ -10,15 +10,26 @@ CREATE TABLE tb_usuarios (
     refresh_token_jti TEXT
 );
 
--- Tabela "tb_estabelecimentos"
+-- Tabela "tb_estabelecimentos" com Endereco embutido
 CREATE TABLE tb_estabelecimentos (
     id BIGSERIAL PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
-    endereco VARCHAR(255) NOT NULL,
+
+    logradouro VARCHAR(255) NOT NULL,
+    numero VARCHAR(50) NOT NULL,
+    complemento VARCHAR(100),
+    bairro VARCHAR(100) NOT NULL,
+    cidade VARCHAR(100) NOT NULL,
+    estado VARCHAR(50) NOT NULL,
+    cep VARCHAR(20) NOT NULL,
+    latitude DOUBLE PRECISION,
+    longitude DOUBLE PRECISION,
+
     usuario_dono_id BIGINT NOT NULL,
     nota_media DOUBLE PRECISION NOT NULL,
     data_criacao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     data_atualizacao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
     CONSTRAINT fk_usuario_dono FOREIGN KEY (usuario_dono_id) REFERENCES tb_usuarios(id)
 );
 

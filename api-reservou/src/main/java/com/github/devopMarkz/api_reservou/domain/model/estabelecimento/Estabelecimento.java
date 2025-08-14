@@ -33,8 +33,8 @@ public class Estabelecimento implements Serializable {
     @Column(name = "nome", nullable = false)
     private String nome;
 
-    @Column(name = "endereco", nullable = false)
-    private String endereco;
+    @Embedded
+    private Endereco endereco;
 
     @ManyToOne
     @JoinColumn(name = "usuario_dono_id", nullable = false)
@@ -63,7 +63,7 @@ public class Estabelecimento implements Serializable {
         this.calculaMedia();
     }
 
-    public Estabelecimento(String nome, String endereco, Usuario dono) {
+    public Estabelecimento(String nome, Endereco endereco, Usuario dono) {
         this.nome = nome;
         this.endereco = endereco;
         this.dono = dono;

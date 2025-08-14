@@ -15,7 +15,7 @@ public class EstabelecimentoResponseDTO {
 
     private Long id;
     private String nome;
-    private String endereco;
+    private EnderecoDTO endereco;
     private Long idDono;
     private Double notaMedia;
     private List<Long> quadras;

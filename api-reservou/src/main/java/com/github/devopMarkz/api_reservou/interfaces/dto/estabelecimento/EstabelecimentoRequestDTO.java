@@ -13,11 +13,10 @@ public class EstabelecimentoRequestDTO {
     @NotBlank(message = "Nome do estabelecimento precisa ser preenchido.")
     private String nome;
 
-    @NotBlank(message = "Endereço precisa ser informado.")
-    private String endereco;
+    @NotNull(message = "Endereço precisa ser informado.")
+    private EnderecoDTO endereco;
 
     @NotNull(message = "Dono do estabelecimento precisa ser informado.")
     @Positive(message = "ID precisa ser um número maior que 0.")
     private Long idDono;
-
 }
