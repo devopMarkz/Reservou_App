@@ -1,18 +1,18 @@
 package com.github.devopMarkz.api_reservou.infraestructure.exception.handlers;
 
-import com.github.devopMarkz.api_reservou.infraestructure.exception.EntidadeInexistenteException;
-import com.github.devopMarkz.api_reservou.infraestructure.exception.TokenInvalidoException;
-import com.github.devopMarkz.api_reservou.infraestructure.exception.UsuarioInativoException;
-import com.github.devopMarkz.api_reservou.infraestructure.exception.ViolacaoUnicidadeChaveException;
+import com.github.devopMarkz.api_reservou.infraestructure.exception.*;
 import com.github.devopMarkz.api_reservou.interfaces.dto.erro.ErroDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @ControllerAdvice
@@ -58,4 +58,35 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(status).body(erroDTO);
     }
 
-}
+    @ExceptionHandler(LimiteQuantiaEstabelecimentoException.class)
+    public ResponseEntity<ErroDTO> handlerLimiteEstabelecimento(LimiteQuantiaEstabelecimentoException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        List<String> erros = List.of(e.getMessage());
+        ErroDTO erroDTO = new ErroDTO(Instant.now().toString(), status.value(), request.getRequestURI(), erros);
+        return ResponseEntity.status(status).body(erroDTO);
+    }
+
+    @ExceptionHandler(ViolacaoRecursoException.class)
+    public ResponseEntity<ErroDTO> handlerViolacaoRecurso(ViolacaoRecursoException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        List<String> erros = List.of(e.getMessage());
+        ErroDTO erroDTO = new ErroDTO(Instant.now().toString(), status.value(), request.getRequestURI(), erros);
+        return ResponseEntity.status(status).body(erroDTO);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErroDTO> handlerMethodArgumentNotValid(MethodArgumentNotValidException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
+        List<String> erros = new ArrayList<>();
+
+        for (FieldError error : fieldErrors) {
+            erros.add(error.getField() + ": " + error.getDefaultMessage());
+        }
+
+        ErroDTO erroDTO = new ErroDTO(Instant.now().toString(), status.value(), request.getRequestURI(), erros);
+        return ResponseEntity.status(status).body(erroDTO);
+    }
+
+
+    }
