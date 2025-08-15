@@ -32,6 +32,7 @@ public class UsuarioService {
 
     @Transactional(rollbackFor = Exception.class)
     public Long criarUsuario(UsuarioRequestDTO requestDTO){
+        validarViolacaoDeFK(requestDTO.getEmail());
         Usuario usuario = usuarioMapper.toUsuario(requestDTO);
         usuario.setSenha(passwordEncoder.encode(requestDTO.getSenha()));
         usuarioRepository.save(usuario);

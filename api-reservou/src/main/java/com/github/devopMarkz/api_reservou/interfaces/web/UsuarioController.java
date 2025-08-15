@@ -4,6 +4,7 @@ import com.github.devopMarkz.api_reservou.application.usuario.UsuarioService;
 import com.github.devopMarkz.api_reservou.interfaces.dto.usuario.UsuarioRequestDTO;
 import com.github.devopMarkz.api_reservou.interfaces.dto.usuario.UsuarioResponseDTO;
 import com.github.devopMarkz.api_reservou.utils.GerenciadorDePermissoes;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedModel;
@@ -26,7 +27,7 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> criarUsuario(@RequestBody UsuarioRequestDTO requestDTO){
+    public ResponseEntity<Void> criarUsuario(@Valid @RequestBody UsuarioRequestDTO requestDTO){
         Long id = usuarioService.criarUsuario(requestDTO);
         URI uri = generateUri(id);
         return ResponseEntity.created(uri).build();
@@ -55,7 +56,7 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> atualizarUsuario(@PathVariable Long id, @RequestBody UsuarioRequestDTO requestDTO){
+    public ResponseEntity<Void> atualizarUsuario(@PathVariable Long id, @Valid @RequestBody UsuarioRequestDTO requestDTO){
         usuarioService.atualizarUsuario(id, requestDTO);
         return ResponseEntity.noContent().build();
     }
@@ -68,7 +69,7 @@ public class UsuarioController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/{id}/desativar")
+    @PatchMapping("/{id}/desativar")
     @PreAuthorize(GerenciadorDePermissoes.ROLE_ADMINISTRADOR)
     public ResponseEntity<Void> desativarUsuario(@PathVariable Long id){
         usuarioService.desativarUsuario(id);
