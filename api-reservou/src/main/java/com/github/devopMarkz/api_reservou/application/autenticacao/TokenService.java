@@ -65,9 +65,7 @@ public class TokenService {
         try {
             String email = verifier.verify(token).getSubject();
 
-            System.out.println(usuarioRepository.existsByEmail(email));
-
-            return usuarioRepository.findByEmail(email)
+            return usuarioRepository.findByEmailComEstabelecimentos(email)
                     .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado!"));
         } catch (JWTCreationException | TokenExpiredException exception) {
             throw new TokenInvalidoException("Token expirado ou inválido");

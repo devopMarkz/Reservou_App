@@ -3,7 +3,7 @@ package com.github.devopMarkz.api_reservou.domain.service.estabelecimento;
 import com.github.devopMarkz.api_reservou.domain.model.estabelecimento.Estabelecimento;
 import com.github.devopMarkz.api_reservou.domain.model.usuario.Usuario;
 import com.github.devopMarkz.api_reservou.infraestructure.exception.LimiteQuantiaEstabelecimentoException;
-import com.github.devopMarkz.api_reservou.interfaces.dto.estabelecimento.EstabelecimentoRequestDTO;
+import com.github.devopMarkz.api_reservou.infraestructure.exception.ViolacaoRecursoException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,6 +20,12 @@ public class EstabelecimentoDomainService {
     public Estabelecimento criarEstabelecimento(Usuario dono, Estabelecimento estabelecimento) {
         estabelecimento.setDono(dono);
         return estabelecimento;
+    }
+
+    public void validarDonoEstabelecimento(Usuario usuarioLogado, Estabelecimento estabelecimento) {
+        if(!usuarioLogado.equals(estabelecimento.getDono())){
+            throw new ViolacaoRecursoException("Usuário " + usuarioLogado.getEmail() + " não pode atualizar o estabelecimento " + estabelecimento.getNome());
+        }
     }
 
 }

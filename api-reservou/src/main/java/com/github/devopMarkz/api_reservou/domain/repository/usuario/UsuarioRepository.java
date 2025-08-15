@@ -16,6 +16,9 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     @Query("SELECT obj FROM Usuario obj WHERE LOWER(obj.email) = LOWER(:email)")
     Optional<Usuario> findByEmail(@Param("email") String email);
 
+    @Query("SELECT u FROM Usuario u LEFT JOIN FETCH u.estabelecimentos WHERE LOWER(u.email) = LOWER(:email)")
+    Optional<Usuario> findByEmailComEstabelecimentos(@Param("email") String email);
+
     boolean existsByEmail(String email);
 
     Page<Usuario> findByNomeContainingIgnoreCase(String nome, Pageable pageable);
