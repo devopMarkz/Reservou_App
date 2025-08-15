@@ -14,8 +14,11 @@ CREATE TABLE tb_usuarios (
 CREATE TABLE tb_estabelecimentos (
     id BIGSERIAL PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
+    descricao TEXT,
+    telefone VARCHAR(20),
+    ativo BOOLEAN NOT NULL DEFAULT TRUE,
 
-    logradouro VARCHAR(255) NOT NULL,
+    logradouro VARCHAR(100) NOT NULL,
     numero VARCHAR(50) NOT NULL,
     complemento VARCHAR(100),
     bairro VARCHAR(100) NOT NULL,
