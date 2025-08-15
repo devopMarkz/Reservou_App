@@ -29,6 +29,7 @@ public abstract class EstabelecimentoMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "dono", ignore = true)
     @Mapping(target = "notaMedia", ignore = true)
+    @Mapping(target = "ativo", ignore = true)
     @Mapping(target = "quadras", ignore = true)
     @Mapping(target = "avaliacoes", ignore = true)
     @Mapping(target = "dataCriacao", ignore = true)

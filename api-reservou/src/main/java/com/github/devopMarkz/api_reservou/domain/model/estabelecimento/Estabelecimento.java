@@ -33,6 +33,12 @@ public class Estabelecimento implements Serializable {
     @Column(name = "nome", nullable = false)
     private String nome;
 
+    @Column(name = "descricao")
+    private String descricao;
+
+    @Column(name = "telefone")
+    private String telefone;
+
     @Embedded
     private Endereco endereco;
 
@@ -40,8 +46,12 @@ public class Estabelecimento implements Serializable {
     @JoinColumn(name = "usuario_dono_id", nullable = false)
     private Usuario dono;
 
+    @Setter(AccessLevel.NONE)
     @Column(name = "nota_media", nullable = false)
-    private Double notaMedia;
+    private Double notaMedia = 0.0;
+
+    @Column(name = "ativo", nullable = false)
+    private Boolean ativo = Boolean.TRUE;
 
     @Setter(AccessLevel.NONE)
     @OneToMany(mappedBy = "estabelecimento", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -73,10 +83,10 @@ public class Estabelecimento implements Serializable {
     private void calculaMedia() {
         if (avaliacoes.isEmpty()) {
             this.notaMedia = 0.0;
+        } else {
+            Double soma = avaliacoes.stream().map(Avaliacao::getNota).reduce(0.0, Double::sum);
+            this.notaMedia = soma / avaliacoes.size();
         }
-
-        Double soma = avaliacoes.stream().map(Avaliacao::getNota).reduce(0.0, Double::sum);
-        this.notaMedia = soma / avaliacoes.size();
     }
 
     public Set<Quadra> getQuadras() {
@@ -94,5 +104,9 @@ public class Estabelecimento implements Serializable {
     public void adicionaAvaliacao(Avaliacao avaliacao) {
         this.avaliacoes.add(avaliacao);
         this.calculaMedia();
+    }
+
+    public void desativar(){
+        this.ativo = Boolean.FALSE;
     }
 }
