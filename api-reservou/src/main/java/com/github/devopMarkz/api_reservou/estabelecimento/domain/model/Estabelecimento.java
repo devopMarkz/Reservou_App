@@ -46,19 +46,18 @@ public class Estabelecimento implements Serializable {
     @JoinColumn(name = "usuario_dono_id", nullable = false)
     private Usuario dono;
 
-    @Setter(AccessLevel.NONE)
-    @Column(name = "nota_media", nullable = false)
-    private Double notaMedia = 0.0;
+    @Transient
+    private Double notaMedia;
 
     @Column(name = "ativo", nullable = false)
     private Boolean ativo = Boolean.TRUE;
 
     @Setter(AccessLevel.NONE)
     @OneToMany(mappedBy = "estabelecimento", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Quadra> quadras  = new HashSet<>();
+    private Set<Quadra> quadras = new HashSet<>();
 
     @Setter(AccessLevel.NONE)
-    @OneToMany(mappedBy = "estabelecimento", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "estabelecimento", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Avaliacao> avaliacoes = new HashSet<>();
 
     @CreationTimestamp
@@ -70,23 +69,26 @@ public class Estabelecimento implements Serializable {
     private LocalDateTime dataAtualizacao;
 
     public Estabelecimento() {
-        this.calculaMedia();
     }
 
     public Estabelecimento(String nome, Endereco endereco, Usuario dono) {
         this.nome = nome;
         this.endereco = endereco;
         this.dono = dono;
-        this.calculaMedia();
     }
 
-    private void calculaMedia() {
-        if (avaliacoes.isEmpty()) {
-            this.notaMedia = 0.0;
-        } else {
-            Double soma = avaliacoes.stream().map(Avaliacao::getNota).reduce(0.0, Double::sum);
-            this.notaMedia = soma / avaliacoes.size();
+    public Double getNotaMedia() {
+        if (this.avaliacoes == null || this.avaliacoes.isEmpty()) {
+            return 0.0;
         }
+        return calculaMedia();
+    }
+
+    private double calculaMedia() {
+        return this.avaliacoes.stream()
+                .mapToDouble(Avaliacao::getNota)
+                .average()
+                .orElse(0.0);
     }
 
     public Set<Quadra> getQuadras() {

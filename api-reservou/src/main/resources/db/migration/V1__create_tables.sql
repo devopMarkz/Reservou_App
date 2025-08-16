@@ -29,7 +29,6 @@ CREATE TABLE tb_estabelecimentos (
     longitude DOUBLE PRECISION,
 
     usuario_dono_id BIGINT NOT NULL,
-    nota_media DOUBLE PRECISION NOT NULL,
     data_criacao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     data_atualizacao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -90,7 +89,3 @@ CREATE TABLE tb_avaliacoes (
     CONSTRAINT fk_usuario_avaliacao FOREIGN KEY (usuario_id) REFERENCES tb_usuarios(id),
     CONSTRAINT fk_estabelecimento_avaliacao FOREIGN KEY (estabelecimento_id) REFERENCES tb_estabelecimentos(id)
 );
-
--- Adicionar constraint para "estabelecimentos" (relacionamento com "usuario_dono")
-ALTER TABLE tb_estabelecimentos
-    ADD CONSTRAINT fk_estabelecimento_usuario FOREIGN KEY (usuario_dono_id) REFERENCES tb_usuarios(id);
