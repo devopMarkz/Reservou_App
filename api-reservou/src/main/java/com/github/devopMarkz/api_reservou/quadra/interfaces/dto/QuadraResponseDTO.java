@@ -15,6 +15,9 @@ public class QuadraResponseDTO {
     private String nome;
     private String tipo;
     private Long idEstabelecimento;
+    private String urlFoto;
+    private String linkMapaEndereco;
+    private String informacoesGerais;
     // private List<HorarioResponseDTO> horarios;
 
 }
