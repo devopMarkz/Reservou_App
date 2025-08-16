@@ -5,6 +5,7 @@ import com.github.devopMarkz.api_reservou.avaliacao.interfaces.dto.AvaliacaoRequ
 import com.github.devopMarkz.api_reservou.avaliacao.interfaces.dto.AvaliacaoResponseDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public abstract class AvaliacaoMapper {
@@ -19,5 +20,15 @@ public abstract class AvaliacaoMapper {
     @Mapping(target = "dataCriacao", ignore = true)
     @Mapping(target = "dataAtualizacao", ignore = true)
     public abstract Avaliacao toEntity(AvaliacaoRequestDTO requestDTO);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "usuario", ignore = true)
+    @Mapping(target = "estabelecimento", ignore = true)
+    @Mapping(target = "dataCriacao", ignore = true)
+    @Mapping(target = "dataAtualizacao", ignore = true)
+    public abstract void updateAvaliacaoFromDTO(
+            AvaliacaoRequestDTO requestDTO,
+            @MappingTarget Avaliacao avaliacao
+    );
 
 }
