@@ -6,8 +6,6 @@ import com.github.devopMarkz.api_reservou.estabelecimento.interfaces.dto.Estabel
 import com.github.devopMarkz.api_reservou.shared.utils.GerenciadorDePermissoes;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -58,7 +56,6 @@ public class EstabelecimentoController {
         @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
         @RequestParam(name = "pageSize", defaultValue = "20") int pageSize
     ){
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Page<EstabelecimentoResponseDTO> responseDTOS = estabelecimentoService.buscarEstabelecimentosParaDono(nome, ativo, logradouro, numero, complemento, bairro, cidade, estado, cep, pageNumber, pageSize);
         return ResponseEntity.ok(responseDTOS);
     }
@@ -80,7 +77,6 @@ public class EstabelecimentoController {
             @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
             @RequestParam(name = "pageSize", defaultValue = "20") int pageSize
     ){
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Page<EstabelecimentoResponseDTO> responseDTOS = estabelecimentoService.buscarEstabelecimentosParaUsuarios(nome, ativo, logradouro, numero, complemento, bairro, cidade, estado, cep, pageNumber, pageSize);
         return ResponseEntity.ok(responseDTOS);
     }
