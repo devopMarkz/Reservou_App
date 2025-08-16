@@ -93,12 +93,11 @@ public class EstabelecimentoService {
                 .withCidade(cidade)
                 .withEstado(estado)
                 .withCep(cep)
-                .withAvaliationsAndQuadrasJoin()
                 .build();
 
         Page<Estabelecimento> estabelecimentos = estabelecimentoRepository.findAll(spec, pageable);
 
-        return estabelecimentos.map(estabelecimentoMapper::toEstabelecimentoResponseDTO);
+        return estabelecimentos.map(estabelecimentoMapper::toEstabelecimentoResponseDTOSemAvaliacoesEQuadras);
     }
 
     @Transactional(readOnly = true)
@@ -115,12 +114,11 @@ public class EstabelecimentoService {
                 .withCidade(cidade)
                 .withEstado(estado)
                 .withCep(cep)
-                .withAvaliationsAndQuadrasJoin()
                 .build();
 
         Page<Estabelecimento> estabelecimentos = estabelecimentoRepository.findAll(spec, pageable);
 
-        return estabelecimentos.map(estabelecimentoMapper::toEstabelecimentoResponseDTO);
+        return estabelecimentos.map(estabelecimentoMapper::toEstabelecimentoResponseDTOSemAvaliacoesEQuadras);
     }
 
     @Transactional

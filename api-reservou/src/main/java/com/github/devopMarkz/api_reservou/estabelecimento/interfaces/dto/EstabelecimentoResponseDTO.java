@@ -1,5 +1,6 @@
 package com.github.devopMarkz.api_reservou.estabelecimento.interfaces.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.github.devopMarkz.api_reservou.avaliacao.interfaces.dto.AvaliacaoResponseDTO;
 import com.github.devopMarkz.api_reservou.quadra.interfaces.dto.QuadraResponseDTO;
 import lombok.AllArgsConstructor;
@@ -13,6 +14,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class EstabelecimentoResponseDTO {
 
     private Long id;

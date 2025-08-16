@@ -17,6 +17,10 @@ public abstract class EstabelecimentoMapper {
 
     public abstract EstabelecimentoResponseDTO toEstabelecimentoResponseDTO(Estabelecimento estabelecimento);
 
+    @Mapping(target = "avaliacoes", ignore = true)
+    @Mapping(target = "quadras", ignore = true)
+    public abstract EstabelecimentoResponseDTO toEstabelecimentoResponseDTOSemAvaliacoesEQuadras(Estabelecimento estabelecimento);
+
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "dono", ignore = true)
     @Mapping(target = "notaMedia", ignore = true)

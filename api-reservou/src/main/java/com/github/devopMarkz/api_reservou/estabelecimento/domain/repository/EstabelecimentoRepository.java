@@ -17,15 +17,17 @@ public interface EstabelecimentoRepository extends JpaRepository<Estabelecimento
     /**
      * Busca um Estabelecimento pelo seu ID, carregando as Quadras associadas.
      * Ideal para o endpoint que lista as quadras de um estabelecimento para o público.
+     * Correção: Adicionado LEFT JOIN FETCH para garantir que o estabelecimento seja retornado
+     * mesmo que não tenha quadras, e DISTINCT para evitar duplicação.
      */
-    @Query("SELECT e FROM Estabelecimento e JOIN FETCH e.quadras q WHERE e.id = :id")
+    @Query("SELECT DISTINCT e FROM Estabelecimento e LEFT JOIN FETCH e.quadras q WHERE e.id = :id")
     Optional<Estabelecimento> findByIdWithQuadras(@Param("id") Long id);
 
     /**
      * Busca um Estabelecimento pelo seu ID, carregando as Avaliações.
      * Ideal para o endpoint que exibe as avaliações de um estabelecimento para o público.
      */
-    @Query("SELECT e FROM Estabelecimento e JOIN FETCH e.avaliacoes a WHERE e.id = :id")
+    @Query("SELECT DISTINCT e FROM Estabelecimento e LEFT JOIN FETCH e.avaliacoes a WHERE e.id = :id")
     Optional<Estabelecimento> findByIdWithAvaliations(@Param("id") Long id);
 
     /**
@@ -45,8 +47,10 @@ public interface EstabelecimentoRepository extends JpaRepository<Estabelecimento
     /**
      * Busca um Estabelecimento pelo seu ID e ID do dono, carregando as Quadras.
      * Usado para garantir que o usuário autenticado é o dono do estabelecimento.
+     * Correção: Adicionado LEFT JOIN FETCH para garantir que o estabelecimento seja retornado
+     * mesmo que não tenha quadras, e DISTINCT para evitar duplicação.
      */
-    @Query("SELECT e FROM Estabelecimento e JOIN FETCH e.quadras q WHERE e.id = :id AND e.dono.id = :idDono")
+    @Query("SELECT DISTINCT e FROM Estabelecimento e LEFT JOIN FETCH e.quadras q WHERE e.id = :id AND e.dono.id = :idDono")
     Optional<Estabelecimento> findByIdAndDonoIdWithQuadras(
             @Param("id") Long id,
             @Param("idDono") Long idDono
@@ -55,8 +59,10 @@ public interface EstabelecimentoRepository extends JpaRepository<Estabelecimento
     /**
      * Busca um Estabelecimento pelo seu ID e ID do dono, carregando as Avaliações.
      * Usado para garantir que o usuário autenticado é o dono do estabelecimento.
+     * Correção: Adicionado LEFT JOIN FETCH para garantir que o estabelecimento seja retornado
+     * mesmo que não tenha avaliações, e DISTINCT para evitar duplicação.
      */
-    @Query("SELECT e FROM Estabelecimento e JOIN FETCH e.avaliacoes a WHERE e.id = :id AND e.dono.id = :idDono")
+    @Query("SELECT DISTINCT e FROM Estabelecimento e LEFT JOIN FETCH e.avaliacoes a WHERE e.id = :id AND e.dono.id = :idDono")
     Optional<Estabelecimento> findByIdAndDonoIdWithAvaliations(
             @Param("id") Long id,
             @Param("idDono") Long idDono
