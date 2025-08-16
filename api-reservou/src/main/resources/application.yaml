@@ -5,7 +5,13 @@ spring:
     active: hmg
   jpa:
     open-in-view: false
+  jackson:
+    time-zone: America/Sao_Paulo
 
 server:
   servlet:
     context-path: /api-reservou-1.0
+
+java:
+  time:
+    zoneid: America/Sao_Paulo

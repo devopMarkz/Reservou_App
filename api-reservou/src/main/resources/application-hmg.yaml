@@ -1,8 +1,11 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/reservou_db
+    url: jdbc:postgresql://localhost:5432/reservou_db?serverTimezone=America/Sao_Paulo
     username: postgres
     password: aluno
+    #    url: jdbc:postgresql://db:5432/reservou_db?serverTimezone=America/Sao_Paulo
+    #    username: admin
+    #    password: password
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -16,9 +19,12 @@ spring:
 
   flyway:
     enabled: true
+    url: jdbc:postgresql://localhost:5432/reservou_db?serverTimezone=America/Sao_Paulo
     user: postgres
     password: aluno
-    url: jdbc:postgresql://localhost:5432/reservou_db
+    #    url: jdbc:postgresql://db:5432/reservou_db?serverTimezone=America/Sao_Paulo
+    #    user: admin
+    #    password: password
 
 token:
   secret:
