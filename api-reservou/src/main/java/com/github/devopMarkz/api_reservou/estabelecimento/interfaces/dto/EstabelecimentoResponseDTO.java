@@ -21,6 +21,10 @@ public class EstabelecimentoResponseDTO {
     private String nome;
     private String descricao;
     private String telefone;
+    private String urlFoto;
+    private String urlFacebook;
+    private String urlInstagram;
+    private String urlSite;
     private EnderecoDTO endereco;
     private Double notaMedia;
     private Boolean ativo;

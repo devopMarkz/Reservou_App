@@ -17,6 +17,12 @@ public class EstabelecimentoRequestDTO {
 
     private String telefone;
 
+    private String urlFacebook;
+
+    private String urlInstagram;
+
+    private String urlSite;
+
     @Valid
     @NotNull(message = "Endereço precisa ser informado.")
     private EnderecoDTO endereco;

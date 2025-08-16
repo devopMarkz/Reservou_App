@@ -52,6 +52,18 @@ public class Estabelecimento implements Serializable {
     @Column(name = "ativo", nullable = false)
     private Boolean ativo = Boolean.TRUE;
 
+    @Column(name = "url_foto")
+    private String urlFoto;
+
+    @Column(name = "url_facebook")
+    private String urlFacebook;
+
+    @Column(name = "url_instagram")
+    private String urlInstagram;
+
+    @Column(name = "url_site")
+    private String urlSite;
+
     @Setter(AccessLevel.NONE)
     @OneToMany(mappedBy = "estabelecimento", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Quadra> quadras = new HashSet<>();
