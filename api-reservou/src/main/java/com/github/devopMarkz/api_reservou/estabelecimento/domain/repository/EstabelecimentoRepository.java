@@ -12,49 +12,59 @@ import java.util.Optional;
 @Repository
 public interface EstabelecimentoRepository extends JpaRepository<Estabelecimento, Long>, JpaSpecificationExecutor<Estabelecimento> {
 
-//    @Query("""
-//        SELECT obj FROM Estabelecimento obj
-//        WHERE obj.dono.id = :idUsuarioDono
-//        AND (:id IS NULL OR obj.id = :id)
-//        AND (:nome IS NULL OR :nome = '' OR UPPER(obj.nome) LIKE UPPER(CONCAT('%', :nome, '%')))
-//        AND (:logradouro IS NULL OR :logradouro = '' OR UPPER(obj.endereco.logradouro) LIKE UPPER(CONCAT('%', :logradouro, '%')))
-//        AND (:numero IS NULL OR :numero = '' OR UPPER(obj.endereco.numero) LIKE UPPER(CONCAT('%', :numero, '%')))
-//        AND (:complemento IS NULL OR :complemento = '' OR UPPER(obj.endereco.complemento) LIKE UPPER(CONCAT('%', :complemento, '%')))
-//        AND (:bairro IS NULL OR :bairro = '' OR UPPER(obj.endereco.bairro) LIKE UPPER(CONCAT('%', :bairro, '%')))
-//        AND (:cidade IS NULL OR :cidade = '' OR UPPER(obj.endereco.cidade) LIKE UPPER(CONCAT('%', :cidade, '%')))
-//        AND (:estado IS NULL OR :estado = '' OR UPPER(obj.endereco.estado) LIKE UPPER(CONCAT('%', :estado, '%')))
-//        AND (:cep IS NULL OR :cep = '' OR UPPER(obj.endereco.cep) LIKE UPPER(CONCAT('%', :cep, '%')))
-//    """)
-//    Page<Estabelecimento> findByFilters(
-//            @Param("idUsuarioDono") Long idUsuarioDono,
-//            @Param("id") Long id,
-//            @Param("nome") String nome,
-//            @Param("logradouro") String logradouro,
-//            @Param("numero") String numero,
-//            @Param("complemento") String complemento,
-//            @Param("bairro") String bairro,
-//            @Param("cidade") String cidade,
-//            @Param("estado") String estado,
-//            @Param("cep") String cep,
-//            Pageable pageable
-//    );
+    // --- Métodos de Leitura para a API Pública (Sem verificação de dono) ---
 
-    @Query("""
-        SELECT obj FROM Estabelecimento obj
-        JOIN FETCH obj.quadras
-        WHERE obj.dono.id = :idUsuarioDono
-        AND (:id IS NULL OR obj.id = :id)
-    """)
-    Optional<Estabelecimento> findByIdWithQuadras(
-            @Param("id") Long id,
-            @Param("idUsuarioDono") Long idUsuarioDono
-    );
+    /**
+     * Busca um Estabelecimento pelo seu ID, carregando as Quadras associadas.
+     * Ideal para o endpoint que lista as quadras de um estabelecimento para o público.
+     */
+    @Query("SELECT e FROM Estabelecimento e JOIN FETCH e.quadras q WHERE e.id = :id")
+    Optional<Estabelecimento> findByIdWithQuadras(@Param("id") Long id);
 
-    @Query("SELECT obj FROM Estabelecimento obj " +
-            "WHERE obj.dono.id = :idDono " +
-            "AND obj.id = :id")
-    Optional<Estabelecimento> buscarPorId(
+    /**
+     * Busca um Estabelecimento pelo seu ID, carregando as Avaliações.
+     * Ideal para o endpoint que exibe as avaliações de um estabelecimento para o público.
+     */
+    @Query("SELECT e FROM Estabelecimento e JOIN FETCH e.avaliacoes a WHERE e.id = :id")
+    Optional<Estabelecimento> findByIdWithAvaliations(@Param("id") Long id);
+
+    /**
+     * Busca um Estabelecimento pelo seu ID, carregando Quadras e Avaliações.
+     * Usar com cautela devido ao potencial problema de "produto cartesiano" em bases de dados grandes.
+     * É mais seguro e performático fazer duas consultas separadas na camada de serviço.
+     */
+    @Query("SELECT DISTINCT e FROM Estabelecimento e " +
+            "LEFT JOIN FETCH e.quadras " +
+            "LEFT JOIN FETCH e.avaliacoes " +
+            "WHERE e.id = :id")
+    Optional<Estabelecimento> findByIdWithAllCollections(@Param("id") Long id);
+
+
+    // --- Métodos para Operações Restritas (Com verificação de dono) ---
+
+    /**
+     * Busca um Estabelecimento pelo seu ID e ID do dono, carregando as Quadras.
+     * Usado para garantir que o usuário autenticado é o dono do estabelecimento.
+     */
+    @Query("SELECT e FROM Estabelecimento e JOIN FETCH e.quadras q WHERE e.id = :id AND e.dono.id = :idDono")
+    Optional<Estabelecimento> findByIdAndDonoIdWithQuadras(
             @Param("id") Long id,
             @Param("idDono") Long idDono
     );
+
+    /**
+     * Busca um Estabelecimento pelo seu ID e ID do dono, carregando as Avaliações.
+     * Usado para garantir que o usuário autenticado é o dono do estabelecimento.
+     */
+    @Query("SELECT e FROM Estabelecimento e JOIN FETCH e.avaliacoes a WHERE e.id = :id AND e.dono.id = :idDono")
+    Optional<Estabelecimento> findByIdAndDonoIdWithAvaliations(
+            @Param("id") Long id,
+            @Param("idDono") Long idDono
+    );
+
+    /**
+     * Metodo simples para verificar a existência do Estabelecimento e sua propriedade.
+     * Usado em operações como "atualizar" ou "desativar", onde não é necessário carregar as coleções.
+     */
+    Optional<Estabelecimento> findByIdAndDonoId(Long id, Long idDono);
 }

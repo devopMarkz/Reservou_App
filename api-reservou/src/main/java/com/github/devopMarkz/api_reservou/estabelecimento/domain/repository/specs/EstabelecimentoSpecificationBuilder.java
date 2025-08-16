@@ -65,6 +65,11 @@ public class EstabelecimentoSpecificationBuilder {
         return this;
     }
 
+    public EstabelecimentoSpecificationBuilder withAvaliationsAndQuadrasJoin() {
+        specs.add(EstabelecimentoSpecifications.joinFetchAvaliationsAndQuadras());
+        return this;
+    }
+
     public Specification<Estabelecimento> build() {
         if (specs.isEmpty()) {
             return (root, query, cb) -> cb.conjunction();

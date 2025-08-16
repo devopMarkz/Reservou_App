@@ -1,7 +1,10 @@
 package com.github.devopMarkz.api_reservou.estabelecimento.domain.repository.specs;
 
 import com.github.devopMarkz.api_reservou.estabelecimento.domain.model.Estabelecimento;
+import jakarta.persistence.criteria.JoinType;
 import org.springframework.data.jpa.domain.Specification;
+
+import java.util.Objects;
 
 public class EstabelecimentoSpecifications {
 
@@ -21,6 +24,24 @@ public class EstabelecimentoSpecifications {
 
     public static Specification<Estabelecimento> ativo(Boolean ativo) {
         return (root, query, cb) -> ativo == null ? null : cb.equal(root.get("ativo"), ativo);
+    }
+
+    public static Specification<Estabelecimento> joinFetchAvaliationsAndQuadras() {
+        return (root, query, cb) -> {
+            if (root.getJavaType() != Estabelecimento.class) {
+                return null;
+            }
+
+            // Adiciona o JOIN FETCH para carregar a coleção de avaliações
+            root.fetch("avaliacoes", JoinType.LEFT);
+
+            // Adiciona o JOIN FETCH para carregar a coleção de quadras
+            root.fetch("quadras", JoinType.LEFT);
+
+            // Garante que o resultado seja único
+            Objects.requireNonNull(query).distinct(true);
+            return cb.conjunction();
+        };
     }
 
     // --- Campos do Endereço ---
