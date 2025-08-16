@@ -8,11 +8,8 @@ import lombok.Getter;
 @Getter
 public class AvaliacaoRequestDTO {
 
-    @NotNull(message = "Usuário é obrigatório")
-    private Long usuarioId;
-
     @NotNull(message = "Estabelecimento é obrigatório")
-    private Long estabelecimentoId;
+    private Long idEstabelecimento;
 
     @NotNull(message = "Nota é obrigatória")
     private Double nota;
