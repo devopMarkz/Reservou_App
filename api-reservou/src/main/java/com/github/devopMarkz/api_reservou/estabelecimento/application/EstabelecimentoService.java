@@ -1,15 +1,15 @@
 package com.github.devopMarkz.api_reservou.estabelecimento.application;
 
-import com.github.devopMarkz.api_reservou.usuario.application.UsuarioAutenticadoService;
-import com.github.devopMarkz.api_reservou.estabelecimento.infraestructure.mapper.EstabelecimentoMapper;
 import com.github.devopMarkz.api_reservou.estabelecimento.domain.model.Estabelecimento;
-import com.github.devopMarkz.api_reservou.usuario.domain.model.Usuario;
 import com.github.devopMarkz.api_reservou.estabelecimento.domain.repository.EstabelecimentoRepository;
 import com.github.devopMarkz.api_reservou.estabelecimento.domain.repository.specs.EstabelecimentoSpecificationBuilder;
 import com.github.devopMarkz.api_reservou.estabelecimento.domain.service.EstabelecimentoDomainService;
-import com.github.devopMarkz.api_reservou.shared.exception.EntidadeInexistenteException;
+import com.github.devopMarkz.api_reservou.estabelecimento.infraestructure.mapper.EstabelecimentoMapper;
 import com.github.devopMarkz.api_reservou.estabelecimento.interfaces.dto.EstabelecimentoRequestDTO;
 import com.github.devopMarkz.api_reservou.estabelecimento.interfaces.dto.EstabelecimentoResponseDTO;
+import com.github.devopMarkz.api_reservou.shared.exception.EntidadeInexistenteException;
+import com.github.devopMarkz.api_reservou.usuario.application.UsuarioAutenticadoService;
+import com.github.devopMarkz.api_reservou.usuario.domain.model.Usuario;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -70,7 +70,7 @@ public class EstabelecimentoService {
 
     @Transactional(readOnly = true)
     public EstabelecimentoResponseDTO buscarPorId(Long id) {
-        Estabelecimento estabelecimento = estabelecimentoRepository.findById(id)
+        Estabelecimento estabelecimento = estabelecimentoRepository.findByIdWithAllCollections(id)
                 .orElseThrow(() -> new EntidadeInexistenteException("Estabelecimento inexistente!"));
 
         return estabelecimentoMapper.toEstabelecimentoResponseDTO(estabelecimento);
@@ -93,6 +93,7 @@ public class EstabelecimentoService {
                 .withCidade(cidade)
                 .withEstado(estado)
                 .withCep(cep)
+                .withAvaliationsAndQuadrasJoin()
                 .build();
 
         Page<Estabelecimento> estabelecimentos = estabelecimentoRepository.findAll(spec, pageable);
@@ -114,6 +115,7 @@ public class EstabelecimentoService {
                 .withCidade(cidade)
                 .withEstado(estado)
                 .withCep(cep)
+                .withAvaliationsAndQuadrasJoin()
                 .build();
 
         Page<Estabelecimento> estabelecimentos = estabelecimentoRepository.findAll(spec, pageable);
