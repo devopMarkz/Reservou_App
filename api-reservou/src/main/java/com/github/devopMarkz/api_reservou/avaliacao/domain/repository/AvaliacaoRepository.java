@@ -40,4 +40,12 @@ public interface AvaliacaoRepository extends JpaRepository<Avaliacao, Long> {
             @Param("nota") Double nota,
             Pageable pageable
     );
+
+    @Query(value = "SELECT EXISTS(" +
+            "SELECT 1 " +
+            "FROM tb_avaliacoes " +
+            "WHERE usuario_id = :idUsuario " +
+            "AND estabelecimento_id = :idEstabelecimento" +
+            ")", nativeQuery = true)
+    boolean existsByIdUsuarioAndIdEstabelecimento(Long idEstabelecimento, Long idUsuario);
 }

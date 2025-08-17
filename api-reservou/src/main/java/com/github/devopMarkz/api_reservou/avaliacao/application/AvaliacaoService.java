@@ -9,6 +9,7 @@ import com.github.devopMarkz.api_reservou.avaliacao.interfaces.dto.AvaliacaoResp
 import com.github.devopMarkz.api_reservou.estabelecimento.domain.model.Estabelecimento;
 import com.github.devopMarkz.api_reservou.estabelecimento.domain.repository.EstabelecimentoRepository;
 import com.github.devopMarkz.api_reservou.shared.exception.EntidadeInexistenteException;
+import com.github.devopMarkz.api_reservou.shared.exception.ViolacaoUnicidadeChaveException;
 import com.github.devopMarkz.api_reservou.usuario.application.UsuarioAutenticadoService;
 import com.github.devopMarkz.api_reservou.usuario.domain.model.Usuario;
 import org.springframework.data.domain.Page;
@@ -41,6 +42,10 @@ public class AvaliacaoService {
                 .orElseThrow(() -> new EntidadeInexistenteException("Estabelecimento inexistente."));
 
         Usuario usuarioLogado = UsuarioAutenticadoService.getUsuarioAutenticado();
+
+        if(avaliacaoRepository.existsByIdUsuarioAndIdEstabelecimento(estabelecimento.getId(), usuarioLogado.getId())) {
+            throw new ViolacaoUnicidadeChaveException("Usuário " + usuarioLogado.getId() + " já fez uma avaliação sobre o estabelecimento " + estabelecimento.getNome() + ".");
+        }
 
         Avaliacao avaliacao = avaliacaoMapper.toEntity(requestDTO);
 
