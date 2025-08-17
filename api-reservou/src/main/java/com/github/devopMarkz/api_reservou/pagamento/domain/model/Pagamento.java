@@ -1,5 +1,6 @@
 package com.github.devopMarkz.api_reservou.pagamento.domain.model;
 
+import com.github.devopMarkz.api_reservou.pedido.domain.model.Pedido;
 import com.github.devopMarkz.api_reservou.reserva.domain.model.Reserva;
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,8 +26,8 @@ public class Pagamento implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "reserva_id", nullable = false)
-    private Reserva reserva;
+    @JoinColumn(name = "pedido_id", nullable = false)
+    private Pedido pedido;
 
     @Column(name = "tipo", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -49,8 +50,8 @@ public class Pagamento implements Serializable {
     public Pagamento() {
     }
 
-    public Pagamento(Reserva reserva, TipoPagamento tipo, StatusPagamento status, BigDecimal valorPago, LocalDateTime dataPagamento) {
-        this.reserva = reserva;
+    public Pagamento(Pedido pedido, TipoPagamento tipo, StatusPagamento status, BigDecimal valorPago, LocalDateTime dataPagamento) {
+        this.pedido = pedido;
         this.tipo = tipo;
         this.status = status;
         this.valorPago = valorPago;

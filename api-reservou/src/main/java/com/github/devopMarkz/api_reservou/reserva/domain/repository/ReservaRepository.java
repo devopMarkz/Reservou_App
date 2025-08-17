@@ -15,18 +15,32 @@ import java.util.Optional;
 public interface ReservaRepository extends JpaRepository<Reserva, Long> {
 
     // Buscar reservas de um usuário específico (paginado)
-    Page<Reserva> findByUsuarioId(Long usuarioId, Pageable pageable);
+    @Query("""
+        SELECT r FROM Reserva r
+        JOIN r.pedido p
+        WHERE p.usuario.id = :usuarioId
+    """)
+    Page<Reserva> findByUsuarioId(@Param("usuarioId") Long usuarioId, Pageable pageable);
 
     // Buscar reservas para um horário específico (paginado)
     Page<Reserva> findByHorarioId(Long horarioId, Pageable pageable);
 
     // Buscar reservas de um usuário para um horário específico
-    Optional<Reserva> findByUsuarioIdAndHorarioId(Long usuarioId, Long horarioId);
+    @Query("""
+        SELECT r FROM Reserva r
+        JOIN r.pedido p
+        WHERE p.usuario.id = :usuarioId AND r.horario.id = :horarioId
+    """)
+    Optional<Reserva> findByUsuarioIdAndHorarioId(
+            @Param("usuarioId") Long usuarioId,
+            @Param("horarioId") Long horarioId
+    );
 
     // Buscar reservas de um usuário para um intervalo de datas
     @Query("""
         SELECT r FROM Reserva r
-        WHERE r.usuario.id = :usuarioId
+        JOIN r.pedido p
+        WHERE p.usuario.id = :usuarioId
         AND r.dataReserva BETWEEN :dataInicio AND :dataFim
     """)
     Page<Reserva> findByUsuarioAndDataReservaBetween(
@@ -36,11 +50,4 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
             Pageable pageable
     );
 
-    // Buscar todas as reservas com status de pagamento PENDENTE (caso você tenha status de pagamento)
-    @Query("""
-        SELECT r FROM Reserva r
-        JOIN r.pagamentos p
-        WHERE p.status = 'PENDENTE'
-    """)
-    Page<Reserva> findReservationsWithPendingPayments(Pageable pageable);
 }

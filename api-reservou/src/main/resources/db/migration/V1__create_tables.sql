@@ -1,4 +1,5 @@
--- Tabela "tb_usuarios"
+-- TABELA DE USUÁRIOS
+-- Mantida sem alterações, pois já está completa.
 CREATE TABLE tb_usuarios (
     id BIGSERIAL PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
@@ -10,7 +11,8 @@ CREATE TABLE tb_usuarios (
     refresh_token_jti TEXT
 );
 
--- Tabela "tb_estabelecimentos" com Endereco embutido
+-- TABELA DE ESTABELECIMENTOS
+-- Adicionando campos para fotos e redes sociais.
 CREATE TABLE tb_estabelecimentos (
     id BIGSERIAL PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
@@ -18,6 +20,13 @@ CREATE TABLE tb_estabelecimentos (
     telefone VARCHAR(20),
     ativo BOOLEAN NOT NULL DEFAULT TRUE,
 
+    -- Novos campos para mídias sociais e foto
+    url_foto VARCHAR(255),
+    url_facebook VARCHAR(255),
+    url_instagram VARCHAR(255),
+    url_site VARCHAR(255),
+
+    -- Endereco embutido mantido conforme sua preferência
     logradouro VARCHAR(100) NOT NULL,
     numero VARCHAR(50) NOT NULL,
     complemento VARCHAR(100),
@@ -35,16 +44,24 @@ CREATE TABLE tb_estabelecimentos (
     CONSTRAINT fk_usuario_dono FOREIGN KEY (usuario_dono_id) REFERENCES tb_usuarios(id)
 );
 
--- Tabela "tb_quadras"
+-- TABELA DE QUADRAS
+-- Adicionando campos para fotos, links e informações gerais.
 CREATE TABLE tb_quadras (
     id BIGSERIAL PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
     tipo VARCHAR(255),
     estabelecimento_id BIGINT NOT NULL,
+
+    -- Novos campos para a quadra
+    url_foto VARCHAR(255),
+    link_mapa_endereco VARCHAR(255),
+    informacoes_gerais TEXT,
+
     CONSTRAINT fk_estabelecimento FOREIGN KEY (estabelecimento_id) REFERENCES tb_estabelecimentos(id)
 );
 
--- Tabela "tb_horarios"
+-- TABELA DE HORÁRIOS
+-- Mantida sem alterações.
 CREATE TABLE tb_horarios (
     id BIGSERIAL PRIMARY KEY,
     quadra_id BIGINT NOT NULL,
@@ -55,29 +72,44 @@ CREATE TABLE tb_horarios (
     CONSTRAINT fk_quadra FOREIGN KEY (quadra_id) REFERENCES tb_quadras(id)
 );
 
--- Tabela "tb_reservas"
-CREATE TABLE tb_reservas (
+-- NOVA TABELA DE PEDIDOS
+-- A nova tabela para centralizar a lógica de negócio da transação.
+CREATE TABLE tb_pedidos (
     id BIGSERIAL PRIMARY KEY,
     usuario_id BIGINT NOT NULL,
+    data_pedido TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(50) NOT NULL,
+    valor_total DECIMAL(10, 2) NOT NULL,
+    CONSTRAINT fk_usuario_pedido FOREIGN KEY (usuario_id) REFERENCES tb_usuarios(id)
+);
+
+-- TABELA DE RESERVAS
+-- Modificada para se vincular a tb_pedidos.
+CREATE TABLE tb_reservas (
+    id BIGSERIAL PRIMARY KEY,
+    pedido_id BIGINT NOT NULL, -- Chave estrangeira para o Pedido
     horario_id BIGINT NOT NULL,
     data_reserva TIMESTAMP NOT NULL,
-    CONSTRAINT fk_usuario FOREIGN KEY (usuario_id) REFERENCES tb_usuarios(id),
+    status VARCHAR(50) NOT NULL, -- Novo campo para o status da reserva
+    CONSTRAINT fk_pedido FOREIGN KEY (pedido_id) REFERENCES tb_pedidos(id),
     CONSTRAINT fk_horario FOREIGN KEY (horario_id) REFERENCES tb_horarios(id)
 );
 
--- Tabela "tb_pagamentos"
+-- TABELA DE PAGAMENTOS
+-- Modificada para se vincular a tb_pedidos.
 CREATE TABLE tb_pagamentos (
     id BIGSERIAL PRIMARY KEY,
-    reserva_id BIGINT NOT NULL,
+    pedido_id BIGINT NOT NULL, -- Chave estrangeira para o Pedido
     tipo VARCHAR(50) NOT NULL,
     status VARCHAR(50),
     valor_pago DECIMAL(10, 2) NOT NULL,
     data_criacao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     data_pagamento TIMESTAMP,
-    CONSTRAINT fk_reserva FOREIGN KEY (reserva_id) REFERENCES tb_reservas(id)
+    CONSTRAINT fk_pedido_pagamento FOREIGN KEY (pedido_id) REFERENCES tb_pedidos(id)
 );
 
--- Tabela "tb_avaliacoes"
+-- TABELA DE AVALIAÇÕES
+-- Adicionando restrição para evitar duplicação.
 CREATE TABLE tb_avaliacoes (
     id BIGSERIAL PRIMARY KEY,
     usuario_id BIGINT NOT NULL,
@@ -87,5 +119,6 @@ CREATE TABLE tb_avaliacoes (
     data_criacao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     data_atualizacao TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_usuario_avaliacao FOREIGN KEY (usuario_id) REFERENCES tb_usuarios(id),
-    CONSTRAINT fk_estabelecimento_avaliacao FOREIGN KEY (estabelecimento_id) REFERENCES tb_estabelecimentos(id)
+    CONSTRAINT fk_estabelecimento_avaliacao FOREIGN KEY (estabelecimento_id) REFERENCES tb_estabelecimentos(id),
+    CONSTRAINT uc_usuario_estabelecimento UNIQUE (usuario_id, estabelecimento_id)
 );

@@ -1,5 +1,3 @@
--- V2__create_indexes.sql
-
 -- Índices para tb_usuarios
 CREATE INDEX idx_usuarios_email ON tb_usuarios(email);
 
@@ -17,13 +15,18 @@ CREATE INDEX idx_horarios_quadra ON tb_horarios(quadra_id);
 CREATE INDEX idx_horarios_data_inicio ON tb_horarios(data_hora_inicio);
 CREATE INDEX idx_horarios_data_fim ON tb_horarios(data_hora_fim);
 
--- Índices para tb_reservas
-CREATE INDEX idx_reservas_usuario ON tb_reservas(usuario_id);
+-- Índices para tb_pedidos (NOVO)
+CREATE INDEX idx_pedidos_usuario ON tb_pedidos(usuario_id);
+CREATE INDEX idx_pedidos_status ON tb_pedidos(status);
+CREATE INDEX idx_pedidos_data_pedido ON tb_pedidos(data_pedido);
+
+-- Índices para tb_reservas (AJUSTADO)
+CREATE INDEX idx_reservas_pedido ON tb_reservas(pedido_id); -- Novo índice para a nova relação
 CREATE INDEX idx_reservas_horario ON tb_reservas(horario_id);
 CREATE INDEX idx_reservas_data_reserva ON tb_reservas(data_reserva);
 
--- Índices para tb_pagamentos
-CREATE INDEX idx_pagamentos_reserva ON tb_pagamentos(reserva_id);
+-- Índices para tb_pagamentos (AJUSTADO)
+CREATE INDEX idx_pagamentos_pedido ON tb_pagamentos(pedido_id); -- Novo índice para a nova relação
 CREATE INDEX idx_pagamentos_tipo ON tb_pagamentos(tipo);
 CREATE INDEX idx_pagamentos_status ON tb_pagamentos(status);
 CREATE INDEX idx_pagamentos_data_criacao ON tb_pagamentos(data_criacao);

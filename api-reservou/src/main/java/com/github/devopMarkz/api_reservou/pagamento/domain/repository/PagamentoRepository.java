@@ -15,15 +15,15 @@ import java.math.BigDecimal;
 @Repository
 public interface PagamentoRepository extends JpaRepository<Pagamento, Long> {
 
-    // Buscar pagamentos pendentes
+    // Buscar pagamentos de um pedido específico
+    Page<Pagamento> findByPedidoId(Long pedidoId, Pageable pageable);
+
+    // Buscar pagamentos pendentes (query HQL)
     @Query("""
         SELECT p FROM Pagamento p
         WHERE p.status = 'PENDENTE'
     """)
     Page<Pagamento> findPagamentosPendentes(Pageable pageable);
-
-    // Buscar pagamentos de uma reserva específica
-    Page<Pagamento> findByReservaId(Long reservaId, Pageable pageable);
 
     // Buscar pagamentos de um tipo específico (ex: Pix ou Presencial)
     Page<Pagamento> findByTipo(TipoPagamento tipo, Pageable pageable);
@@ -31,7 +31,7 @@ public interface PagamentoRepository extends JpaRepository<Pagamento, Long> {
     // Buscar pagamentos de um status específico (ex: PAGO ou CANCELADO)
     Page<Pagamento> findByStatus(StatusPagamento status, Pageable pageable);
 
-    // Buscar pagamentos com valor maior que um valor específico
+    // Buscar pagamentos com valor maior que um valor específico (query HQL)
     @Query("""
         SELECT p FROM Pagamento p
         WHERE p.valorPago > :valor

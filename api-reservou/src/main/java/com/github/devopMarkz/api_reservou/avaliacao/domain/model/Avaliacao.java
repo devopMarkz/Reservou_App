@@ -15,7 +15,14 @@ import java.time.LocalDateTime;
 @Setter
 @EqualsAndHashCode(of = "id")
 @Entity
-@Table(name = "tb_avaliacoes")
+@Table(
+        name = "tb_avaliacoes",
+        uniqueConstraints = {
+            @UniqueConstraint(
+                    columnNames = {"usuario_id", "estabelecimento_id"}
+            )
+        }
+)
 public class Avaliacao {
 
     @Id
