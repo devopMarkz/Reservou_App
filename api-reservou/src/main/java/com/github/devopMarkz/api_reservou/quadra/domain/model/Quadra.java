@@ -45,6 +45,9 @@ public class Quadra implements Serializable {
     @Column(name = "informacoes_gerais")
     private String informacoesGerais;
 
+    @Column(name = "ativo", nullable = false)
+    private Boolean ativo = Boolean.TRUE;
+
     @Setter(AccessLevel.NONE)
     @OneToMany(mappedBy = "quadra", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Horario> horarios = new HashSet<>();

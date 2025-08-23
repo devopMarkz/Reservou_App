@@ -15,10 +15,6 @@ public class QuadraRequestDTO {
 
     private String tipo;
 
-    @NotNull(message = "Estabelecimento precisa ser informado.")
-    @Positive(message = "ID do estabelecimento precisa ser um número maior que 0.")
-    private Long idEstabelecimento;
-
     private String linkMapaEndereco;
 
     private String informacoesGerais;

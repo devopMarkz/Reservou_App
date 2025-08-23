@@ -18,6 +18,7 @@ public class QuadraResponseDTO {
     private String urlFoto;
     private String linkMapaEndereco;
     private String informacoesGerais;
+    private Boolean ativo;
     // private List<HorarioResponseDTO> horarios;
 
 }
