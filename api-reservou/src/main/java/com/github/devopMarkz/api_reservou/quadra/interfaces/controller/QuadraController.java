@@ -80,4 +80,14 @@ public class QuadraController {
         return ResponseEntity.noContent().build();
     }
 
+    @PatchMapping("/{idQuadra}")
+    @PreAuthorize(GerenciadorDePermissoes.ROLE_DONO)
+    public ResponseEntity<Void> desativarQuadra(
+            @PathVariable("idEstabelecimento") Long idEstabelecimento,
+            @PathVariable("idQuadra") Long idQuadra
+    ){
+        quadraService.desativarQuadra(idEstabelecimento, idQuadra);
+        return ResponseEntity.noContent().build();
+    }
+
 }

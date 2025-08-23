@@ -123,4 +123,27 @@ public class QuadraService {
 
         quadraRepository.delete(quadra);
     }
+
+    public void desativarQuadra(Long idEstabelecimento, Long idQuadra) {
+        Estabelecimento estabelecimento = estabelecimentoRepository.findById(idEstabelecimento)
+                .orElseThrow(() -> new EntidadeInexistenteException("Estabelecimento inexistente."));
+
+        Quadra quadra = quadraRepository.findById(idQuadra)
+                .orElseThrow(() -> new EntidadeInexistenteException("Quadra inexistente."));
+
+        Usuario usuarioLogado = UsuarioAutenticadoService.getUsuarioAutenticado();
+
+        estabelecimentoDomainService.validarDonoEstabelecimento(usuarioLogado, estabelecimento);
+
+        quadraDomainService.verificarQuadraEmEstabelecimento(quadra, estabelecimento);
+
+        quadra.setAtivo(false);
+
+        quadraRepository.save(quadra);
+    }
+
+//    public void conjuntoDeValidacoesValidaDonoVerificaQuadra(Usuario usuarioLogado, Estabelecimento estabelecimento, Quadra quadra){
+//        estabelecimentoDomainService.validarDonoEstabelecimento(usuarioLogado, estabelecimento);
+//        quadraDomainService.verificarQuadraEmEstabelecimento(quadra, estabelecimento);
+//    }
 }
