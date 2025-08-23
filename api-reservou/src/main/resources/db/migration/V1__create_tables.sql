@@ -56,6 +56,7 @@ CREATE TABLE tb_quadras (
     url_foto VARCHAR(255),
     link_mapa_endereco VARCHAR(255),
     informacoes_gerais TEXT,
+    ativo BOOLEAN NOT NULL DEFAULT TRUE,
 
     CONSTRAINT fk_estabelecimento FOREIGN KEY (estabelecimento_id) REFERENCES tb_estabelecimentos(id)
 );
