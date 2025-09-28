@@ -12,9 +12,6 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class HorarioRequestDTO {
 
-    @NotNull(message = "ID da quadra deve ser informado.")
-    private Long idQuadra;
-
     @NotBlank(message = "Data Hora de início deve ser informada.")
     private String dataHoraInicio;
 

@@ -21,6 +21,6 @@ public class HorarioResponseDTO {
     private LocalDateTime dataHoraFim;
     private BigDecimal preco;
     private Boolean reservado;
-    private String duracao;
+    private Long duracao;
 
 }

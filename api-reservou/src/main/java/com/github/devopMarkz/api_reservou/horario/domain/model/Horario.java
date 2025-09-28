@@ -2,20 +2,21 @@ package com.github.devopMarkz.api_reservou.horario.domain.model;
 
 import com.github.devopMarkz.api_reservou.quadra.domain.model.Quadra;
 import com.github.devopMarkz.api_reservou.reserva.domain.model.Reserva;
+import jakarta.annotation.PostConstruct;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode(of = "id")
@@ -35,7 +36,7 @@ public class Horario implements Serializable {
 
     // Relacionamento com Reserva (um horário pode ter várias reservas, desde que sejam feitas em dias diferentes)
     @Setter(AccessLevel.NONE)
-    @OneToMany(mappedBy = "horario", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "horario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Reserva> reservas = new HashSet<>();
 
     @Column(name = "data_hora_inicio", nullable = false)
@@ -47,13 +48,17 @@ public class Horario implements Serializable {
     @Column(name = "preco", nullable = false)
     private BigDecimal preco = BigDecimal.ZERO;
 
-    @Column(name = "reservado", nullable = false)
-    private Boolean reservado = Boolean.FALSE;
+    @Column(name = "ativo", nullable = false)
+    private Boolean ativo = Boolean.TRUE;
+
+    @Transient
+    private Boolean reservado;
 
     @Transient
     private Duration duracao;
 
-    public Horario() {
+    @PostLoad
+    public void calcularDuracao() {
         if(this.dataHoraInicio == null || this.dataHoraFim == null) {
             this.duracao = Duration.ZERO;
         } else {
@@ -71,4 +76,9 @@ public class Horario implements Serializable {
     public Set<Reserva> getReservas() {
         return Collections.unmodifiableSet(this.reservas);
     }
+
+    public void desativar(){
+        this.ativo = Boolean.FALSE;
+    }
+
 }
