@@ -69,7 +69,7 @@ CREATE TABLE tb_horarios (
     data_hora_inicio TIMESTAMP NOT NULL,
     data_hora_fim TIMESTAMP NOT NULL,
     preco DECIMAL(10, 2) NOT NULL DEFAULT 0,
-    reservado BOOLEAN NOT NULL DEFAULT FALSE,
+    ativo BOOLEAN NOT NULL DEFAULT TRUE,
     CONSTRAINT fk_quadra FOREIGN KEY (quadra_id) REFERENCES tb_quadras(id)
 );
 
