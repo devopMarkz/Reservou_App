@@ -29,7 +29,7 @@ public abstract class HorarioMapper {
 
     @Mapping(target = "idQuadra", expression = "java( getIdFromQuadra(horario) )")
     @Mapping(target = "reservado", expression = "java( getReservado(horario) )")
-    @Mapping(target = "duracao", expression = "java( getDuracaoEmMinutos(horario) )")
+    @Mapping(target = "duracaoEmMinutos", expression = "java( getDuracaoEmMinutos(horario) )")
     public abstract HorarioResponseDTO toHorarioResponseDTO(Horario horario);
 
     @Mapping(target = "id", ignore = true)
