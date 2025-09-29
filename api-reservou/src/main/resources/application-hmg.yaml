@@ -17,11 +17,11 @@ spring:
     show-sql: true
 
 
-  flyway:
-    enabled: true
-    url: jdbc:postgresql://localhost:5432/reservou_db?serverTimezone=America/Sao_Paulo
-    user: postgres
-    password: aluno
+#  flyway:
+#    enabled: true
+#    url: jdbc:postgresql://localhost:5432/reservou_db?serverTimezone=America/Sao_Paulo
+#    user: postgres
+#    password: aluno
     #    url: jdbc:postgresql://db:5432/reservou_db?serverTimezone=America/Sao_Paulo
     #    user: admin
     #    password: password
