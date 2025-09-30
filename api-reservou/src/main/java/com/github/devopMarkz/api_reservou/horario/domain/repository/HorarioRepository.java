@@ -1,5 +1,6 @@
 package com.github.devopMarkz.api_reservou.horario.domain.repository;
 
+import com.github.devopMarkz.api_reservou.horario.domain.model.DiaSemana;
 import com.github.devopMarkz.api_reservou.horario.domain.model.Horario;
 import com.github.devopMarkz.api_reservou.horario.interfaces.dto.HorarioResponseDTO;
 import org.springframework.data.domain.Page;
@@ -12,7 +13,9 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public interface HorarioRepository extends JpaRepository<Horario, Long>, JpaSpecificationExecutor<Horario> {
@@ -61,6 +64,21 @@ public interface HorarioRepository extends JpaRepository<Horario, Long>, JpaSpec
             @Param("dia") LocalDate dia,
             @Param("diaDaSemanaStr") String diaDaSemanaStr,
             Pageable pageable
+    );
+
+    @Query("""
+        SELECT DISTINCT h FROM Horario h JOIN h.diasDisponiveis hd
+        WHERE h.quadra.id = :quadraId
+        AND h.ativo = true
+        AND hd.diaSemana IN :diasDaSemana
+        AND h.dataHoraInicio < :dataHoraFim
+        AND h.dataHoraFim > :dataHoraInicio
+    """)
+    List<Horario> findOverlappingHorarios(
+            @Param("quadraId") Long quadraId,
+            @Param("dataHoraInicio") LocalDateTime dataHoraInicio,
+            @Param("dataHoraFim") LocalDateTime dataHoraFim,
+            @Param("diasDaSemana") Set<DiaSemana> diasDaSemana
     );
 
 }

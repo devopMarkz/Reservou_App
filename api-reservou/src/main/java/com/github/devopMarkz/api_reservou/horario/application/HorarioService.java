@@ -8,6 +8,7 @@ import com.github.devopMarkz.api_reservou.horario.domain.repository.HorarioDiaRe
 import com.github.devopMarkz.api_reservou.horario.domain.repository.HorarioRepository;
 import com.github.devopMarkz.api_reservou.horario.domain.repository.specs.HorarioSpecificationsBuilder;
 import com.github.devopMarkz.api_reservou.horario.infrastructure.HorarioMapper;
+import com.github.devopMarkz.api_reservou.horario.infrastructure.exceptions.HorarioConflituosoException;
 import com.github.devopMarkz.api_reservou.horario.interfaces.dto.HorarioRequestDTO;
 import com.github.devopMarkz.api_reservou.horario.interfaces.dto.HorarioResponseDTO;
 import com.github.devopMarkz.api_reservou.quadra.domain.model.Quadra;
@@ -129,20 +130,26 @@ public class HorarioService {
             throw new EntidadeInexistenteException("Quadra inexistente.");
         }
 
+        List<Horario> conflitos = horarioRepository.findOverlappingHorarios(
+                idQuadra,
+                requestDTO.getDataHoraInicio(),
+                requestDTO.getDataHoraFim(),
+                requestDTO.getDiasDisponivel()
+        );
+
+        if (!conflitos.isEmpty()) {
+            throw new HorarioConflituosoException("Já existe um horário cadastrado que conflita com os dias e horários informados.");
+        }
+
         Quadra quadra = quadraRepository.getReferenceById(idQuadra);
-
         Usuario usuarioLogado = UsuarioAutenticadoService.getUsuarioAutenticado();
-
         estabelecimentoDomainService.validarDonoEstabelecimento(usuarioLogado, quadra.getEstabelecimento());
 
         Horario horario = horarioMapper.toHorario(requestDTO);
-
         horario.setQuadra(quadra);
-
         converterEnumEmDiasDisponiveis(horario, requestDTO.getDiasDisponivel());
 
         horario = horarioRepository.save(horario);
-
         return horario.getId();
     }
 
