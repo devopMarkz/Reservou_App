@@ -25,13 +25,16 @@ public abstract class HorarioMapper {
     @Mapping(target = "ativo", ignore = true)
     @Mapping(target = "reservado", ignore = true)
     @Mapping(target = "duracao", ignore = true)
+    @Mapping(target = "diasDisponiveis", ignore = true)
     public abstract Horario toHorario(HorarioRequestDTO requestDTO);
 
+    // @Mapping(target = "diasDisponivel", ignore = true)
+    @Mapping(target = "idReserva", ignore = true)
     @Mapping(target = "idQuadra", expression = "java( getIdFromQuadra(horario) )")
-    @Mapping(target = "reservado", expression = "java( getReservado(horario) )")
     @Mapping(target = "duracaoEmMinutos", expression = "java( getDuracaoEmMinutos(horario) )")
     public abstract HorarioResponseDTO toHorarioResponseDTO(Horario horario);
 
+    @Mapping(target = "diasDisponiveis", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "quadra", ignore = true)
     @Mapping(target = "reservas", ignore = true)
@@ -45,12 +48,9 @@ public abstract class HorarioMapper {
         return horario.getQuadra().getId();
     }
 
-    protected Boolean getReservado(Horario horario){
-        return horarioRepository.isHorarioReservadoNoDia(horario, horario.getDataHoraInicio(), horario.getDataHoraFim());
-    }
-
-    protected Long getDuracaoEmMinutos(Horario horario){
-        return horario.getDuracao().toMinutes();
+    protected double getDuracaoEmMinutos(Horario horario){
+        long minutes = horario.getDuracao().toMinutes();
+        return (double) minutes;
     }
 
 }

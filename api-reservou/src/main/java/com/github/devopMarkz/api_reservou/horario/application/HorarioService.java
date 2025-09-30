@@ -1,7 +1,10 @@
 package com.github.devopMarkz.api_reservou.horario.application;
 
 import com.github.devopMarkz.api_reservou.estabelecimento.domain.service.EstabelecimentoDomainService;
+import com.github.devopMarkz.api_reservou.horario.domain.model.DiaSemana;
 import com.github.devopMarkz.api_reservou.horario.domain.model.Horario;
+import com.github.devopMarkz.api_reservou.horario.domain.model.HorarioDia;
+import com.github.devopMarkz.api_reservou.horario.domain.repository.HorarioDiaRepository;
 import com.github.devopMarkz.api_reservou.horario.domain.repository.HorarioRepository;
 import com.github.devopMarkz.api_reservou.horario.domain.repository.specs.HorarioSpecificationsBuilder;
 import com.github.devopMarkz.api_reservou.horario.infrastructure.HorarioMapper;
@@ -20,7 +23,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class HorarioService {
@@ -29,15 +36,18 @@ public class HorarioService {
     private final QuadraRepository quadraRepository;
     private final EstabelecimentoDomainService estabelecimentoDomainService;
     private final HorarioMapper horarioMapper;
+    private final HorarioDiaRepository horarioDiaRepository;
 
     public HorarioService(HorarioRepository horarioRepository,
                           QuadraRepository quadraRepository,
                           EstabelecimentoDomainService estabelecimentoDomainService,
-                          HorarioMapper horarioMapper) {
+                          HorarioMapper horarioMapper,
+                          HorarioDiaRepository horarioDiaRepository) {
         this.horarioRepository = horarioRepository;
         this.quadraRepository = quadraRepository;
         this.estabelecimentoDomainService = estabelecimentoDomainService;
         this.horarioMapper = horarioMapper;
+        this.horarioDiaRepository = horarioDiaRepository;
     }
 
     @Transactional(readOnly = true)
@@ -45,7 +55,7 @@ public class HorarioService {
         Quadra quadra = quadraRepository.findById(idQuadra)
                 .orElseThrow(() -> new EntidadeInexistenteException("Quadra inexistente."));
 
-        Horario horario = horarioRepository.findById(idHorario)
+        Horario horario = horarioRepository.findByIdAndQuadraId(idHorario, idQuadra)
                 .orElseThrow(() -> new EntidadeInexistenteException("Horário não encontrado."));
 
         return horarioMapper.toHorarioResponseDTO(horario);
@@ -71,6 +81,44 @@ public class HorarioService {
         return horarios.map(horarioMapper::toHorarioResponseDTO);
     }
 
+    @Transactional(readOnly = true)
+    public Page<HorarioResponseDTO> buscarPorDia(Long quadraId, LocalDate dia, int pageNumber, int pageSize) {
+        if (!quadraRepository.existsById(quadraId)) {
+            throw new EntidadeInexistenteException("Quadra inexistente.");
+        }
+
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+
+        Page<Object[]> paginaDeResultadosCrus = horarioRepository.findHorariosParaDia(quadraId, dia, pageable);
+
+        Page<HorarioResponseDTO> paginaDeDTOs = paginaDeResultadosCrus.map(row -> {
+            LocalDateTime dataHoraInicio = ((java.sql.Timestamp) row[3]).toLocalDateTime();
+            LocalDateTime dataHoraFim = ((java.sql.Timestamp) row[4]).toLocalDateTime();
+
+            Double duracaoEmMinutos = ((java.math.BigDecimal) row[6]).doubleValue();
+
+            return new HorarioResponseDTO(
+                    (Long) row[0],
+                    (Long) row[1],
+                    (Long) row[2],
+                    dataHoraInicio,
+                    dataHoraFim,
+                    (BigDecimal) row[5],
+                    duracaoEmMinutos
+            );
+        });
+
+        paginaDeDTOs.forEach(horarioDTO -> {
+            List<String> diasDTO = horarioDiaRepository.findAllByHorarioId(horarioDTO.getId())
+                    .stream()
+                    .map(horarioDia -> horarioDia.getDiaSemana().name())
+                    .toList();
+            horarioDTO.setDiasDisponivel(diasDTO);
+        });
+
+        return paginaDeDTOs;
+    }
+
     @Transactional
     public Long criarHorario(Long idQuadra, HorarioRequestDTO requestDTO) {
         if(!quadraRepository.existsById(idQuadra)) {
@@ -86,6 +134,8 @@ public class HorarioService {
         Horario horario = horarioMapper.toHorario(requestDTO);
 
         horario.setQuadra(quadra);
+
+        converterEnumEmDiasDisponiveis(horario, requestDTO.getDiasDisponivel());
 
         horario = horarioRepository.save(horario);
 
@@ -128,6 +178,17 @@ public class HorarioService {
                 .orElseThrow(() -> new EntidadeInexistenteException("Horário inexistente."));
 
         horario.desativar();
+    }
+
+    private void converterEnumEmDiasDisponiveis(Horario horario, Set<DiaSemana> diasSemana){
+        Set<HorarioDia> diasDisponiveis = new HashSet<>();
+
+        for (DiaSemana diaSemana : diasSemana){
+            HorarioDia horarioDia = new HorarioDia(null, horario, diaSemana);
+            diasDisponiveis.add(horarioDia);
+        }
+
+        horario.setDiasDisponiveis(diasDisponiveis);
     }
 
 }

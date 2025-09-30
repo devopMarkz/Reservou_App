@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.net.URI;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static com.github.devopMarkz.api_reservou.shared.utils.GeradorDeUri.generateUri;
@@ -41,6 +42,18 @@ public class HorarioController {
     @PreAuthorize(GerenciadorDePermissoes.ROLE_USUARIO_COMUM)
     public ResponseEntity<HorarioResponseDTO> buscarPorId(@PathVariable Long idQuadra, @PathVariable Long id){
         return ResponseEntity.ok(horarioService.buscarPorId(idQuadra, id));
+    }
+
+    @GetMapping("/dia")
+    @PreAuthorize(GerenciadorDePermissoes.ROLE_USUARIO_COMUM)
+    public ResponseEntity<Page<HorarioResponseDTO>> buscarPorDia(
+            @PathVariable Long idQuadra,
+            @RequestParam(name = "dia", required = true) LocalDate dia,
+            @RequestParam(name = "pageNumber", required = false, defaultValue = "0") int pageNumber,
+            @RequestParam(name = "pageSize", required = false, defaultValue = "20") int pageSize)
+    {
+        Page<HorarioResponseDTO> response = horarioService.buscarPorDia(idQuadra, dia, pageNumber, pageSize);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping

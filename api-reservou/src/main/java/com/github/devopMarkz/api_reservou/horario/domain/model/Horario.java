@@ -27,7 +27,7 @@ public class Horario implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)   ///
     private Long id;
 
     @ManyToOne
@@ -50,6 +50,9 @@ public class Horario implements Serializable {
 
     @Column(name = "ativo", nullable = false)
     private Boolean ativo = Boolean.TRUE;
+
+    @OneToMany(mappedBy = "horario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<HorarioDia> diasDisponiveis = new HashSet<>();
 
     @Transient
     private Boolean reservado;

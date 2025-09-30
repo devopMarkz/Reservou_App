@@ -123,3 +123,16 @@ CREATE TABLE tb_avaliacoes (
     CONSTRAINT fk_estabelecimento_avaliacao FOREIGN KEY (estabelecimento_id) REFERENCES tb_estabelecimentos(id),
     CONSTRAINT uc_usuario_estabelecimento UNIQUE (usuario_id, estabelecimento_id)
 );
+
+-- Tabela de Horarios Dias (tb_horarios_dias)
+CREATE TABLE tb_horarios_dias (
+    id BIGSERIAL PRIMARY KEY,
+    horario_id BIGINT NOT NULL, -- Chave estrangeira para Horário
+    dia_semana VARCHAR(10) NOT NULL, -- Campo para armazenar o dia da semana
+
+    -- Definindo a chave estrangeira para a tabela de horarios
+    CONSTRAINT fk_horario FOREIGN KEY (horario_id) REFERENCES tb_horarios(id),
+
+    -- Adicionando o índice para facilitar as buscas por Horario e Dia
+    CONSTRAINT idx_horario_dia UNIQUE (horario_id, dia_semana)
+);
