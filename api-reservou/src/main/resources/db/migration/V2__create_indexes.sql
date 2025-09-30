@@ -15,7 +15,6 @@ CREATE INDEX idx_quadras_estabelecimento ON tb_quadras(estabelecimento_id);
 CREATE INDEX idx_horarios_quadra_ativo ON tb_horarios (quadra_id, ativo);
 CREATE INDEX idx_horarios_data_inicio ON tb_horarios(data_hora_inicio);
 CREATE INDEX idx_horarios_data_fim ON tb_horarios(data_hora_fim);
-CREATE INDEX idx_horarios_reservado ON tb_horarios(reservado);
 
 -- Índices para tb_pedidos (NOVO)
 CREATE INDEX idx_pedidos_usuario ON tb_pedidos(usuario_id);
