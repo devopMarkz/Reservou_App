@@ -35,27 +35,31 @@ public interface HorarioRepository extends JpaRepository<Horario, Long>, JpaSpec
     );
 
     @Query(value = """
-SELECT
-    h.id AS id,
-    h.quadra_id AS idQuadra,
-    r.id AS idReserva,
-    h.data_hora_inicio AS dataHoraInicio,
-    h.data_hora_fim AS dataHoraFim,
-    h.preco AS preco,
-    (EXTRACT(EPOCH FROM (h.data_hora_fim - h.data_hora_inicio)) / 60) AS duracaoEmMinutos
-FROM
-    tb_horarios h
-LEFT JOIN
-    tb_reservas r ON r.horario_id = h.id AND CAST(r.data_reserva AS DATE) = :dia
-WHERE
-    h.quadra_id = :quadraId
-    AND h.ativo = true
-ORDER BY
-    h.data_hora_inicio
-""", nativeQuery = true)
+    SELECT
+        h.id AS id,
+        h.quadra_id AS idQuadra,
+        r.id AS idReserva,
+        h.data_hora_inicio AS dataHoraInicio,
+        h.data_hora_fim AS dataHoraFim,
+        h.preco AS preco,
+        (EXTRACT(EPOCH FROM (h.data_hora_fim - h.data_hora_inicio)) / 60) AS duracaoEmMinutos
+    FROM
+        tb_horarios h
+    INNER JOIN
+        tb_horarios_dias hd ON hd.horario_id = h.id
+    LEFT JOIN
+        tb_reservas r ON r.horario_id = h.id AND CAST(r.data_reserva AS DATE) = :dia
+    WHERE
+        h.quadra_id = :quadraId
+        AND h.ativo = true
+        AND hd.dia_semana = :diaDaSemanaStr
+    ORDER BY
+        h.data_hora_inicio
+    """, nativeQuery = true)
     Page<Object[]> findHorariosParaDia(
             @Param("quadraId") Long quadraId,
             @Param("dia") LocalDate dia,
+            @Param("diaDaSemanaStr") String diaDaSemanaStr,
             Pageable pageable
     );
 

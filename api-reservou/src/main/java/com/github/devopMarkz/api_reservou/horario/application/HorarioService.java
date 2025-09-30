@@ -23,8 +23,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoField;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -89,7 +91,9 @@ public class HorarioService {
 
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
 
-        Page<Object[]> paginaDeResultadosCrus = horarioRepository.findHorariosParaDia(quadraId, dia, pageable);
+        String diaDaSemanaStr = getStringDiaDaSemana(dia);
+
+        Page<Object[]> paginaDeResultadosCrus = horarioRepository.findHorariosParaDia(quadraId, dia, diaDaSemanaStr, pageable);
 
         Page<HorarioResponseDTO> paginaDeDTOs = paginaDeResultadosCrus.map(row -> {
             LocalDateTime dataHoraInicio = ((java.sql.Timestamp) row[3]).toLocalDateTime();
@@ -189,6 +193,20 @@ public class HorarioService {
         }
 
         horario.setDiasDisponiveis(diasDisponiveis);
+    }
+
+    private String getStringDiaDaSemana(LocalDate dia){
+        int dayOfWeek = dia.getDayOfWeek().get(ChronoField.DAY_OF_WEEK);
+
+        String diaDaSemanaStr = null;
+
+        for (DiaSemana diaSemana : DiaSemana.values()){
+            if(diaSemana.ordinal() == dayOfWeek){
+                return diaSemana.name();
+            }
+        }
+
+        throw new IllegalStateException("Não foi possível mapear o dia da semana para o Enum: " + dia.getDayOfWeek());
     }
 
 }
