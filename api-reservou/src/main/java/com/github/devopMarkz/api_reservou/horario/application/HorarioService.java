@@ -7,6 +7,7 @@ import com.github.devopMarkz.api_reservou.horario.domain.model.HorarioDia;
 import com.github.devopMarkz.api_reservou.horario.domain.repository.HorarioDiaRepository;
 import com.github.devopMarkz.api_reservou.horario.domain.repository.HorarioRepository;
 import com.github.devopMarkz.api_reservou.horario.domain.repository.specs.HorarioSpecificationsBuilder;
+import com.github.devopMarkz.api_reservou.horario.domain.service.HorarioDomainService;
 import com.github.devopMarkz.api_reservou.horario.infrastructure.HorarioMapper;
 import com.github.devopMarkz.api_reservou.horario.infrastructure.exceptions.HorarioConflituosoException;
 import com.github.devopMarkz.api_reservou.horario.interfaces.dto.HorarioRequestDTO;
@@ -40,17 +41,20 @@ public class HorarioService {
     private final EstabelecimentoDomainService estabelecimentoDomainService;
     private final HorarioMapper horarioMapper;
     private final HorarioDiaRepository horarioDiaRepository;
+    private final HorarioDomainService horarioDomainService;
 
     public HorarioService(HorarioRepository horarioRepository,
                           QuadraRepository quadraRepository,
                           EstabelecimentoDomainService estabelecimentoDomainService,
                           HorarioMapper horarioMapper,
-                          HorarioDiaRepository horarioDiaRepository) {
+                          HorarioDiaRepository horarioDiaRepository,
+                          HorarioDomainService horarioDomainService) {
         this.horarioRepository = horarioRepository;
         this.quadraRepository = quadraRepository;
         this.estabelecimentoDomainService = estabelecimentoDomainService;
         this.horarioMapper = horarioMapper;
         this.horarioDiaRepository = horarioDiaRepository;
+        this.horarioDomainService = horarioDomainService;
     }
 
     @Transactional(readOnly = true)
@@ -130,16 +134,7 @@ public class HorarioService {
             throw new EntidadeInexistenteException("Quadra inexistente.");
         }
 
-        List<Horario> conflitos = horarioRepository.findOverlappingHorarios(
-                idQuadra,
-                requestDTO.getDataHoraInicio(),
-                requestDTO.getDataHoraFim(),
-                requestDTO.getDiasDisponivel()
-        );
-
-        if (!conflitos.isEmpty()) {
-            throw new HorarioConflituosoException("Já existe um horário cadastrado que conflita com os dias e horários informados.");
-        }
+        validarConflitos(idQuadra, requestDTO);
 
         Quadra quadra = quadraRepository.getReferenceById(idQuadra);
         Usuario usuarioLogado = UsuarioAutenticadoService.getUsuarioAutenticado();
@@ -158,6 +153,8 @@ public class HorarioService {
         if(!quadraRepository.existsById(idQuadra)) {
             throw new EntidadeInexistenteException("Quadra inexistente.");
         }
+
+        validarConflitos(idQuadra, requestDTO);
 
         Horario horario = horarioRepository.findById(idHorario)
                 .orElseThrow(() -> new EntidadeInexistenteException("Horário inexistente."));
@@ -189,6 +186,21 @@ public class HorarioService {
                 .orElseThrow(() -> new EntidadeInexistenteException("Horário inexistente."));
 
         horario.desativar();
+    }
+
+    private void validarConflitos(Long idQuadra, HorarioRequestDTO requestDTO){
+        horarioDomainService.validarHorario(requestDTO.getDataHoraInicio(), requestDTO.getDataHoraFim());
+
+        List<Horario> conflitos = horarioRepository.findOverlappingHorarios(
+                idQuadra,
+                requestDTO.getDataHoraInicio(),
+                requestDTO.getDataHoraFim(),
+                requestDTO.getDiasDisponivel()
+        );
+
+        if (!conflitos.isEmpty()) {
+            throw new HorarioConflituosoException("Já existe um horário cadastrado que conflita com os dias e horários informados.");
+        }
     }
 
     private void converterEnumEmDiasDisponiveis(Horario horario, Set<DiaSemana> diasSemana){
