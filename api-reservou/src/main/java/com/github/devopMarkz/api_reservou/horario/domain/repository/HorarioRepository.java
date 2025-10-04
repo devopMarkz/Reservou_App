@@ -81,4 +81,9 @@ public interface HorarioRepository extends JpaRepository<Horario, Long>, JpaSpec
             @Param("diasDaSemana") Set<DiaSemana> diasDaSemana
     );
 
+    @Query("SELECT COUNT(hd) > 0 FROM HorarioDia hd " +
+            "WHERE hd.horario.id = :horarioId " +
+            "AND hd.diaSemana = :diaSemana")
+    boolean isDiaDisponivel(@Param("horarioId") Long horarioId, @Param("diaSemana") DiaSemana diaSemana);
+
 }

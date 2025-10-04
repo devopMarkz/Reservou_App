@@ -1,11 +1,10 @@
 package com.github.devopMarkz.api_reservou.reserva.application;
 
+import com.github.devopMarkz.api_reservou.horario.domain.model.DiaSemana;
 import com.github.devopMarkz.api_reservou.horario.domain.model.Horario;
 import com.github.devopMarkz.api_reservou.horario.domain.repository.HorarioRepository;
 import com.github.devopMarkz.api_reservou.horario.infrastructure.exceptions.HorarioConflituosoException;
 import com.github.devopMarkz.api_reservou.reserva.domain.model.*;
-import com.github.devopMarkz.api_reservou.reserva.domain.model.Pagamento;
-import com.github.devopMarkz.api_reservou.reserva.domain.model.Pedido;
 import com.github.devopMarkz.api_reservou.reserva.domain.repository.PagamentoRepository;
 import com.github.devopMarkz.api_reservou.reserva.domain.repository.PedidoRepository;
 import com.github.devopMarkz.api_reservou.reserva.domain.repository.ReservaRepository;
@@ -21,8 +20,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoField;
 import java.util.List;
 
 @Service
@@ -59,6 +60,15 @@ public class ReservaService {
         for (HorarioReservaDTO dto : reservasDTO) {
             Horario horario = horarioRepository.findById(dto.getHorarioId())
                     .orElseThrow(() -> new EntidadeInexistenteException("Horário não encontrado: " + dto.getHorarioId()));
+
+            String diaDaSemanaReserva = getStringDiaDaSemana(dto.getDia());
+
+            DiaSemana diaSemana = DiaSemana.valueOf(diaDaSemanaReserva);
+            boolean diaDisponivel = horarioRepository.isDiaDisponivel(horario.getId(), diaSemana);
+            if (!diaDisponivel) {
+                throw new DataReservaInvalidaException(
+                        "O horário não está disponível para o dia " + dto.getDia() + " (" + diaDaSemanaReserva + ")");
+            }
 
             // Validando a data da reserva
             LocalDateTime dataLimiteReserva = LocalDateTime.of(
@@ -103,7 +113,7 @@ public class ReservaService {
         pedido = pedidoRepository.save(pedido);
 
         // Cria pagamento vinculado ao pedido
-        com.github.devopMarkz.api_reservou.reserva.domain.model.Pagamento pagamento = new Pagamento();
+        Pagamento pagamento = new Pagamento();
         pagamento.setPedido(pedido);
         pagamento.setTipo(tipoPagamento);
         pagamento.setStatus(StatusPagamento.PENDENTE);
@@ -125,7 +135,6 @@ public class ReservaService {
         dto.setStatus(pedido.getStatus().name());
         dto.setValorTotal(pedido.getValorTotal());
 
-        // Convertendo Reservas para DTO
         dto.setReservas(pedido.getReservas().stream()
                 .map(r -> new ReservaResponseDTO(
                         r.getId(),
@@ -136,7 +145,6 @@ public class ReservaService {
                 .toList()
         );
 
-        // Pagamento (se existir)
         if (pedido.getPagamento() != null) {
             PagamentoResponseDTO pagamentoDTO = new PagamentoResponseDTO();
             pagamentoDTO.setId(pedido.getPagamento().getId());
@@ -149,5 +157,16 @@ public class ReservaService {
         }
 
         return dto;
+    }
+
+    private String getStringDiaDaSemana(LocalDate dia){
+        int dayOfWeek = dia.getDayOfWeek().get(ChronoField.DAY_OF_WEEK);
+
+        for (DiaSemana diaSemana : DiaSemana.values()){
+            if(diaSemana.getDia() == dayOfWeek){
+                return diaSemana.name();
+            }
+        }
+        throw new IllegalStateException("Não foi possível mapear o dia da semana para o Enum: " + dia.getDayOfWeek());
     }
 }
