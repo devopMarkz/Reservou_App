@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -49,5 +50,13 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
             @Param("dataFim") LocalDateTime dataFim,
             Pageable pageable
     );
+
+    @Query("""
+        SELECT CASE WHEN COUNT(r) > 0 THEN true ELSE false END
+        FROM Reserva r
+        WHERE r.horario.id = :horarioId
+          AND CAST(r.dataReserva AS date) = :dia
+    """)
+    boolean existsByHorarioAndData(@Param("horarioId") Long horarioId, @Param("dia") LocalDate dia);
 
 }

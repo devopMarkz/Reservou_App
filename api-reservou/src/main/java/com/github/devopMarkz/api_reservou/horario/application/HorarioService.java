@@ -220,7 +220,7 @@ public class HorarioService {
         String diaDaSemanaStr = null;
 
         for (DiaSemana diaSemana : DiaSemana.values()){
-            if(diaSemana.ordinal() == dayOfWeek){
+            if(diaSemana.getDia() == dayOfWeek){
                 return diaSemana.name();
             }
         }

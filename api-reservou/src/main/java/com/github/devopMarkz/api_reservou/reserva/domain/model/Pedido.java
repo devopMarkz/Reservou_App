@@ -1,6 +1,5 @@
-package com.github.devopMarkz.api_reservou.pedido.domain.model;
+package com.github.devopMarkz.api_reservou.reserva.domain.model;
 
-import com.github.devopMarkz.api_reservou.reserva.domain.model.Reserva;
 import com.github.devopMarkz.api_reservou.usuario.domain.model.Usuario;
 import jakarta.persistence.*;
 import lombok.*;
@@ -42,9 +41,22 @@ public class Pedido {
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Reserva> reservas = new HashSet<>();
 
+    @OneToOne(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Pagamento pagamento;
+
     public Pedido(Usuario usuario, StatusPedido status, BigDecimal valorTotal) {
         this.usuario = usuario;
         this.status = status;
         this.valorTotal = valorTotal;
+    }
+
+    public void adicionarReserva(Reserva reserva) {
+        reserva.setPedido(this);
+        this.reservas.add(reserva);
+    }
+
+    public void adicionarPagamento(Pagamento pagamento) {
+        pagamento.setPedido(this);
+        this.pagamento = pagamento;
     }
 }

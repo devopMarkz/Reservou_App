@@ -1,4 +1,4 @@
-package com.github.devopMarkz.api_reservou.pagamento.interfaces.dto;
+package com.github.devopMarkz.api_reservou.reserva.interfaces.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

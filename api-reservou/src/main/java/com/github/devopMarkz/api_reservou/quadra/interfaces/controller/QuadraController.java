@@ -32,7 +32,7 @@ public class QuadraController {
     ){
         Long idQuadra = quadraService.criarQuadra(idEstabelecimento, requestDTO);
         URI location = generateUri(idQuadra);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.created(location).build();
     }
 
     @GetMapping("/{idQuadra}")

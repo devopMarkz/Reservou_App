@@ -1,11 +1,11 @@
-package com.github.devopMarkz.api_reservou.pagamento.domain.model;
+package com.github.devopMarkz.api_reservou.reserva.domain.model;
 
 public enum TipoPagamento {
 
     PIX("Pix"),
     PRESENCIAL("Presencial");
 
-    private String value;
+    private final String value;
 
     TipoPagamento(String value) {
         this.value = value;

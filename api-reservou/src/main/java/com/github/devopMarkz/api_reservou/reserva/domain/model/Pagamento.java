@@ -1,7 +1,5 @@
-package com.github.devopMarkz.api_reservou.pagamento.domain.model;
+package com.github.devopMarkz.api_reservou.reserva.domain.model;
 
-import com.github.devopMarkz.api_reservou.pedido.domain.model.Pedido;
-import com.github.devopMarkz.api_reservou.reserva.domain.model.Reserva;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -25,7 +23,7 @@ public class Pagamento implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "pedido_id", nullable = false)
     private Pedido pedido;
 

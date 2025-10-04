@@ -2,6 +2,7 @@ package com.github.devopMarkz.api_reservou.shared.exception.handlers;
 
 import com.github.devopMarkz.api_reservou.estabelecimento.interfaces.exception.LimiteQuantiaEstabelecimentoException;
 import com.github.devopMarkz.api_reservou.horario.infrastructure.exceptions.HorarioConflituosoException;
+import com.github.devopMarkz.api_reservou.reserva.infraestructure.exceptions.DataReservaInvalidaException;
 import com.github.devopMarkz.api_reservou.shared.exception.EntidadeInexistenteException;
 import com.github.devopMarkz.api_reservou.shared.exception.ViolacaoRecursoException;
 import com.github.devopMarkz.api_reservou.shared.exception.ViolacaoUnicidadeChaveException;
@@ -96,6 +97,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HorarioConflituosoException.class)
     public ResponseEntity<ErroDTO> handlerHorarioConflituosoException(HorarioConflituosoException e, HttpServletRequest request) {
         HttpStatus status = HttpStatus.CONFLICT;
+        List<String> erros = List.of(e.getMessage());
+        ErroDTO erroDTO = new ErroDTO(Instant.now().toString(), status.value(), request.getRequestURI(), erros);
+        return ResponseEntity.status(status).body(erroDTO);
+    }
+
+    @ExceptionHandler(DataReservaInvalidaException.class)
+    public ResponseEntity<ErroDTO> handlerDataReservaInvalidaException(DataReservaInvalidaException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
         List<String> erros = List.of(e.getMessage());
         ErroDTO erroDTO = new ErroDTO(Instant.now().toString(), status.value(), request.getRequestURI(), erros);
         return ResponseEntity.status(status).body(erroDTO);

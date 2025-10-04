@@ -7,7 +7,7 @@ public enum StatusReserva {
     CANCELADA("Cancelada"),
     CONCLUIDA("Concluída");
 
-    String descricao;
+    private final String descricao;
 
     StatusReserva(String descricao) {
         this.descricao = descricao;

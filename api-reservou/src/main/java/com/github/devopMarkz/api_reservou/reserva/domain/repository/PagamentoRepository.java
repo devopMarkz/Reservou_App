@@ -1,8 +1,8 @@
-package com.github.devopMarkz.api_reservou.pagamento.domain.repository;
+package com.github.devopMarkz.api_reservou.reserva.domain.repository;
 
-import com.github.devopMarkz.api_reservou.pagamento.domain.model.Pagamento;
-import com.github.devopMarkz.api_reservou.pagamento.domain.model.StatusPagamento;
-import com.github.devopMarkz.api_reservou.pagamento.domain.model.TipoPagamento;
+import com.github.devopMarkz.api_reservou.reserva.domain.model.Pagamento;
+import com.github.devopMarkz.api_reservou.reserva.domain.model.StatusPagamento;
+import com.github.devopMarkz.api_reservou.reserva.domain.model.TipoPagamento;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

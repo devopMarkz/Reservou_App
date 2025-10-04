@@ -1,4 +1,4 @@
-package com.github.devopMarkz.api_reservou.pagamento.domain.model;
+package com.github.devopMarkz.api_reservou.reserva.domain.model;
 
 public enum StatusPagamento {
 
@@ -7,7 +7,7 @@ public enum StatusPagamento {
     EXPIRADO("Expirado"),
     CANCELADO("Cancelado");
 
-    private String value;
+    private final String value;
 
     StatusPagamento(String value) {
         this.value = value;
