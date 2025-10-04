@@ -1,18 +1,18 @@
-package com.github.devopMarkz.api_reservou.reserva.application;
+package com.github.devopMarkz.api_reservou.pedido.application;
 
 import com.github.devopMarkz.api_reservou.horario.domain.model.DiaSemana;
 import com.github.devopMarkz.api_reservou.horario.domain.model.Horario;
 import com.github.devopMarkz.api_reservou.horario.domain.repository.HorarioRepository;
 import com.github.devopMarkz.api_reservou.horario.infrastructure.exceptions.HorarioConflituosoException;
-import com.github.devopMarkz.api_reservou.reserva.domain.model.*;
-import com.github.devopMarkz.api_reservou.reserva.domain.repository.PagamentoRepository;
-import com.github.devopMarkz.api_reservou.reserva.domain.repository.PedidoRepository;
-import com.github.devopMarkz.api_reservou.reserva.domain.repository.ReservaRepository;
-import com.github.devopMarkz.api_reservou.reserva.infraestructure.exceptions.DataReservaInvalidaException;
-import com.github.devopMarkz.api_reservou.reserva.interfaces.dto.HorarioReservaDTO;
-import com.github.devopMarkz.api_reservou.reserva.interfaces.dto.PagamentoResponseDTO;
-import com.github.devopMarkz.api_reservou.reserva.interfaces.dto.PedidoResponseDTO;
-import com.github.devopMarkz.api_reservou.reserva.interfaces.dto.ReservaResponseDTO;
+import com.github.devopMarkz.api_reservou.pedido.domain.model.*;
+import com.github.devopMarkz.api_reservou.pedido.domain.repository.PagamentoRepository;
+import com.github.devopMarkz.api_reservou.pedido.domain.repository.PedidoRepository;
+import com.github.devopMarkz.api_reservou.pedido.domain.repository.ReservaRepository;
+import com.github.devopMarkz.api_reservou.pedido.infraestructure.exceptions.DataReservaInvalidaException;
+import com.github.devopMarkz.api_reservou.pedido.interfaces.dto.HorarioReservaDTO;
+import com.github.devopMarkz.api_reservou.pedido.interfaces.dto.PagamentoResponseDTO;
+import com.github.devopMarkz.api_reservou.pedido.interfaces.dto.PedidoResponseDTO;
+import com.github.devopMarkz.api_reservou.pedido.interfaces.dto.ReservaResponseDTO;
 import com.github.devopMarkz.api_reservou.shared.exception.EntidadeInexistenteException;
 import com.github.devopMarkz.api_reservou.usuario.application.UsuarioAutenticadoService;
 import com.github.devopMarkz.api_reservou.usuario.domain.model.Usuario;
@@ -27,17 +27,17 @@ import java.time.temporal.ChronoField;
 import java.util.List;
 
 @Service
-public class ReservaService {
+public class PedidoService {
 
     private final HorarioRepository horarioRepository;
     private final ReservaRepository reservaRepository;
     private final PedidoRepository pedidoRepository;
     private final PagamentoRepository pagamentoRepository;
 
-    public ReservaService(HorarioRepository horarioRepository,
-                          ReservaRepository reservaRepository,
-                          PedidoRepository pedidoRepository,
-                          PagamentoRepository pagamentoRepository) {
+    public PedidoService(HorarioRepository horarioRepository,
+                         ReservaRepository reservaRepository,
+                         PedidoRepository pedidoRepository,
+                         PagamentoRepository pagamentoRepository) {
         this.horarioRepository = horarioRepository;
         this.reservaRepository = reservaRepository;
         this.pedidoRepository = pedidoRepository;
@@ -56,6 +56,7 @@ public class ReservaService {
         pedido.setUsuario(usuario);
         pedido.setStatus(StatusPedido.CRIADO);
         pedido.setValorTotal(BigDecimal.ZERO);
+        pedido.setDataExpiracao(LocalDateTime.now().plusMinutes(30));
 
         for (HorarioReservaDTO dto : reservasDTO) {
             Horario horario = horarioRepository.findById(dto.getHorarioId())

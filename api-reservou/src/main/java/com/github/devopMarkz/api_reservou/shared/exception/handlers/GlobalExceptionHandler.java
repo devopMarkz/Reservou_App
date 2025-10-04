@@ -2,7 +2,7 @@ package com.github.devopMarkz.api_reservou.shared.exception.handlers;
 
 import com.github.devopMarkz.api_reservou.estabelecimento.interfaces.exception.LimiteQuantiaEstabelecimentoException;
 import com.github.devopMarkz.api_reservou.horario.infrastructure.exceptions.HorarioConflituosoException;
-import com.github.devopMarkz.api_reservou.reserva.infraestructure.exceptions.DataReservaInvalidaException;
+import com.github.devopMarkz.api_reservou.pedido.infraestructure.exceptions.DataReservaInvalidaException;
 import com.github.devopMarkz.api_reservou.shared.exception.EntidadeInexistenteException;
 import com.github.devopMarkz.api_reservou.shared.exception.ViolacaoRecursoException;
 import com.github.devopMarkz.api_reservou.shared.exception.ViolacaoUnicidadeChaveException;

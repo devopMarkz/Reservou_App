@@ -1,8 +1,8 @@
-package com.github.devopMarkz.api_reservou.reserva.interfaces.dto;
+package com.github.devopMarkz.api_reservou.pedido.interfaces.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.github.devopMarkz.api_reservou.reserva.domain.model.StatusPagamento;
-import com.github.devopMarkz.api_reservou.reserva.domain.model.TipoPagamento;
+import com.github.devopMarkz.api_reservou.pedido.domain.model.StatusPagamento;
+import com.github.devopMarkz.api_reservou.pedido.domain.model.TipoPagamento;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

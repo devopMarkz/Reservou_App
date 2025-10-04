@@ -1,8 +1,7 @@
 package com.github.devopMarkz.api_reservou.horario.domain.model;
 
 import com.github.devopMarkz.api_reservou.quadra.domain.model.Quadra;
-import com.github.devopMarkz.api_reservou.reserva.domain.model.Reserva;
-import jakarta.annotation.PostConstruct;
+import com.github.devopMarkz.api_reservou.pedido.domain.model.Reserva;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,7 +9,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;

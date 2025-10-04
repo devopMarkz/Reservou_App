@@ -1,4 +1,4 @@
-package com.github.devopMarkz.api_reservou.reserva.domain.model;
+package com.github.devopMarkz.api_reservou.pedido.domain.model;
 
 public enum StatusPedido {
 

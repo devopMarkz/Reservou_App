@@ -1,4 +1,4 @@
-package com.github.devopMarkz.api_reservou.reserva.domain.model;
+package com.github.devopMarkz.api_reservou.pedido.domain.model;
 
 import com.github.devopMarkz.api_reservou.usuario.domain.model.Usuario;
 import jakarta.persistence.*;
@@ -43,6 +43,9 @@ public class Pedido {
 
     @OneToOne(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private Pagamento pagamento;
+
+    @Column(name = "data_expiracao")
+    private LocalDateTime dataExpiracao;
 
     public Pedido(Usuario usuario, StatusPedido status, BigDecimal valorTotal) {
         this.usuario = usuario;

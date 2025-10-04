@@ -1,6 +1,6 @@
-package com.github.devopMarkz.api_reservou.reserva.domain.repository;
+package com.github.devopMarkz.api_reservou.pedido.domain.repository;
 
-import com.github.devopMarkz.api_reservou.reserva.domain.model.Reserva;
+import com.github.devopMarkz.api_reservou.pedido.domain.model.Reserva;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
