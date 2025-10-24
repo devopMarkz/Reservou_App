@@ -42,3 +42,7 @@ CREATE INDEX idx_avaliacoes_data_criacao ON tb_avaliacoes(data_criacao);
 
 -- Índices para tb_horarios_dias
 CREATE INDEX idx_horarios_dias_horario_dia ON tb_horarios_dias (horario_id, dia_semana);
+
+-- Índices auxiliares (opcional mas útil para buscas)
+CREATE INDEX idx_ru_usuario ON tb_reserva_usuarios (usuario_id);
+CREATE INDEX idx_ru_reserva ON tb_reserva_usuarios (reserva_id);

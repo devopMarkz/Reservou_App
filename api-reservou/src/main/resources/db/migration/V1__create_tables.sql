@@ -82,13 +82,15 @@ CREATE TABLE tb_pedidos (
 
 -- TABELA DE RESERVAS
 CREATE TABLE tb_reservas (
-     id BIGSERIAL PRIMARY KEY,
-     pedido_id BIGINT NOT NULL,
-     horario_id BIGINT NOT NULL,
-     data_reserva TIMESTAMP NOT NULL,
-     status VARCHAR(50) NOT NULL,
-     CONSTRAINT fk_pedido FOREIGN KEY (pedido_id) REFERENCES tb_pedidos(id),
-     CONSTRAINT fk_horario FOREIGN KEY (horario_id) REFERENCES tb_horarios(id)
+    id BIGSERIAL PRIMARY KEY,
+    pedido_id BIGINT NOT NULL,
+    horario_id BIGINT NOT NULL,
+    data_reserva TIMESTAMP NOT NULL,
+    status VARCHAR(50) NOT NULL,
+    privacidade VARCHAR(50) NOT NULL,
+    limite_participantes_externos INT,
+    CONSTRAINT fk_pedido FOREIGN KEY (pedido_id) REFERENCES tb_pedidos(id),
+    CONSTRAINT fk_horario FOREIGN KEY (horario_id) REFERENCES tb_horarios(id)
 );
 
 -- TABELA DE PAGAMENTOS (1:1 com pedido)
@@ -115,4 +117,17 @@ CREATE TABLE tb_avaliacoes (
     CONSTRAINT fk_usuario_avaliacao FOREIGN KEY (usuario_id) REFERENCES tb_usuarios(id),
     CONSTRAINT fk_estabelecimento_avaliacao FOREIGN KEY (estabelecimento_id) REFERENCES tb_estabelecimentos(id),
     CONSTRAINT uc_usuario_estabelecimento UNIQUE (usuario_id, estabelecimento_id)
+);
+
+-- Participantes da reserva (apenas usuários do sistema)
+CREATE TABLE tb_reserva_usuarios (
+    reserva_id BIGINT NOT NULL,
+    usuario_id BIGINT NOT NULL,
+    criado_em TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT pk_reserva_usuarios PRIMARY KEY (reserva_id, usuario_id),
+    CONSTRAINT fk_ru_reserva FOREIGN KEY (reserva_id)
+     REFERENCES tb_reservas(id) ON DELETE CASCADE,
+    CONSTRAINT fk_ru_usuario FOREIGN KEY (usuario_id)
+     REFERENCES tb_usuarios(id) ON DELETE CASCADE
 );
