@@ -1,14 +1,15 @@
-FROM amazoncorretto:17.0.14-alpine
+FROM maven:3.9.9-amazoncorretto-17-alpine AS builder
+WORKDIR /builder
 
-ENV TZ=America/Sao_Paulo
+COPY pom.xml .
+RUN mvn dependency:go-offline
 
+COPY src ./src
+RUN mvn clean package -DskipTests
+
+FROM amazoncorretto:17-alpine
 WORKDIR /app
 
-COPY target/*.jar /app/app.jar
+COPY --from=builder /builder/target/*.jar ./api-reservou.jar
 
-EXPOSE 8080
-
-CMD java -jar \
-    -Duser.timezone=America/Sao_Paulo \
-    app.jar \
-    --spring.profiles.active=hmg
+ENTRYPOINT ["java", "-jar", "api-reservou.jar"]
