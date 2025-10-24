@@ -31,3 +31,32 @@ token:
     signature: ${SECRET_SIGNATURE}
   expiration-time: 4
   refresh-expiration-time: 8
+
+
+#spring:
+#  datasource:
+#    url: jdbc:postgresql://db:5432/reservou
+#    username: postgres
+#    password: postgres
+#    driver-class-name: org.postgresql.Driver
+#
+#  jpa:
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.PostgreSQLDialect
+#        format_sql: true
+#    hibernate.ddl-auto: none
+#    show-sql: true
+#
+## Configuração de Flyway (se usar migração de banco de dados)
+## flyway:
+##   enabled: true
+##   url: jdbc:postgresql://db:5432/reservou  # Usando o nome do serviço "db"
+##   user: postgres
+##   password: postgres
+#
+#token:
+#  secret:
+#    signature: ${SECRET_SIGNATURE}
+#  expiration-time: 4
+#  refresh-expiration-time: 8
