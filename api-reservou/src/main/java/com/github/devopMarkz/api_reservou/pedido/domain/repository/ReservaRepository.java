@@ -3,6 +3,7 @@ package com.github.devopMarkz.api_reservou.pedido.domain.repository;
 import com.github.devopMarkz.api_reservou.pedido.domain.model.Reserva;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -58,5 +59,9 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
           AND CAST(r.dataReserva AS date) = :dia
     """)
     boolean existsByHorarioAndData(@Param("horarioId") Long horarioId, @Param("dia") LocalDate dia);
+
+    @EntityGraph(attributePaths = "participantes")
+    @Query("select r from Reserva r where r.id = :id")
+    Optional<Reserva> findWithParticipantesById(@Param("id") Long id);
 
 }

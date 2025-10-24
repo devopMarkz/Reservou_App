@@ -106,6 +106,24 @@ public class PedidoService {
             reserva.setDataReserva(dto.getDia().atTime(horario.getDataHoraInicio().toLocalTime()));
             reserva.setStatus(StatusReserva.PENDENTE_CONFIRMACAO);
 
+            PrivacidadeReserva privacidadeReserva;
+            int limiteParticipantesExternos;
+
+            if(dto.getPrivacidadeReserva() == null || dto.getPrivacidadeReserva().isEmpty()) {
+                privacidadeReserva = PrivacidadeReserva.PRIVADA;
+                limiteParticipantesExternos = 0;
+            } else {
+                 privacidadeReserva = PrivacidadeReserva.valueOf(dto.getPrivacidadeReserva());
+                 if(dto.getLimiteParticipantesExternos() != null) {
+                     limiteParticipantesExternos = dto.getLimiteParticipantesExternos();
+                 } else {
+                     limiteParticipantesExternos = 0;
+                 }
+            }
+
+            reserva.setPrivacidade(privacidadeReserva);
+            reserva.setLimiteParticipantesExternos(limiteParticipantesExternos);
+
             pedido.getReservas().add(reserva);
             pedido.setValorTotal(pedido.getValorTotal().add(horario.getPreco()));
         }
@@ -141,7 +159,9 @@ public class PedidoService {
                         r.getId(),
                         r.getHorario().getId(),
                         r.getDataReserva(),
-                        r.getStatus().name()
+                        r.getStatus().name(),
+                        r.getPrivacidade().getDescricao(),
+                        r.getLimiteParticipantesExternos()
                 ))
                 .toList()
         );

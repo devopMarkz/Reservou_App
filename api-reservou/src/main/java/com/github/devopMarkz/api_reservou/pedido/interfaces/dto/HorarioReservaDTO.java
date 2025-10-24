@@ -1,5 +1,6 @@
 package com.github.devopMarkz.api_reservou.pedido.interfaces.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +13,13 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class HorarioReservaDTO {
+
+    @NotNull(message = "Necessário informar horário que irá ser reservado.")
     private Long horarioId;
+
+    @NotNull(message = "Necessário informar data da reserva.")
     private LocalDate dia;
+
+    private String privacidadeReserva;
+    private Integer limiteParticipantesExternos;
 }
