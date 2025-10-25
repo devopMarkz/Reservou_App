@@ -46,7 +46,7 @@ public class SecurityConfig {
                             "/swagger-ui/**",
                             "/webjars/**",
                             "/actuator/**"
-                    ).hasRole(GerenciadorDePermissoes.ROLE_ADMINISTRADOR);
+                    ).permitAll(); //.hasRole(GerenciadorDePermissoes.ROLE_ADMINISTRADOR);
 
                     auth.requestMatchers(HttpMethod.POST, "/auth/**").permitAll();
                     auth.requestMatchers(HttpMethod.POST, "/usuarios").permitAll();

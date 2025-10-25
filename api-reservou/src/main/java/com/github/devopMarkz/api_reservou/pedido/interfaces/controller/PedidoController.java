@@ -6,6 +6,7 @@ import com.github.devopMarkz.api_reservou.pedido.interfaces.dto.HorarioReservaDT
 import com.github.devopMarkz.api_reservou.pedido.interfaces.dto.PedidoResponseDTO;
 import com.github.devopMarkz.api_reservou.shared.utils.GerenciadorDePermissoes;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,27 @@ public class PedidoController {
     ) {
         PedidoResponseDTO pedidoResponseDTO = pedidoService.criarPedidoComReservas(reservasDTO, tipoPagamento);
         return ResponseEntity.ok(pedidoResponseDTO);
+    }
+
+    @GetMapping("/user")
+    @PreAuthorize(GerenciadorDePermissoes.ROLE_USUARIO_COMUM)
+    public ResponseEntity<Page<PedidoResponseDTO>> buscarPedidosPorUsuario(
+            @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
+            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize
+    ){
+        Page<PedidoResponseDTO> pedidos = pedidoService.buscarPedidosPorUsuario(pageNumber, pageSize);
+        return ResponseEntity.ok(pedidos);
+    }
+
+    @GetMapping("/estabelecimento/{idEstabelecimento}")
+    @PreAuthorize(GerenciadorDePermissoes.ROLE_DONO)
+    public ResponseEntity<Page<PedidoResponseDTO>> getPedidosByEstabelecimentoAndDono(
+            @PathVariable Long idEstabelecimento,
+            @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
+            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize
+    ) {
+        Page<PedidoResponseDTO> pedidos = pedidoService.buscarPedidosPorDono(idEstabelecimento, pageNumber, pageSize);
+        return ResponseEntity.ok(pedidos);
     }
 
 }

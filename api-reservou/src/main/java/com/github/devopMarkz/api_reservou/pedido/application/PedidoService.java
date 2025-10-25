@@ -16,6 +16,9 @@ import com.github.devopMarkz.api_reservou.pedido.interfaces.dto.ReservaResponseD
 import com.github.devopMarkz.api_reservou.shared.exception.EntidadeInexistenteException;
 import com.github.devopMarkz.api_reservou.usuario.application.UsuarioAutenticadoService;
 import com.github.devopMarkz.api_reservou.usuario.domain.model.Usuario;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -146,6 +149,22 @@ public class PedidoService {
         return toPedidoResponseDTO(pedido);
     }
 
+    @Transactional(readOnly = true)
+    public Page<PedidoResponseDTO> buscarPedidosPorUsuario(int pageNumber, int pageSize){
+        Usuario usuarioLogado = UsuarioAutenticadoService.getUsuarioAutenticado();
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<Pedido> pedidos = pedidoRepository.buscarPedidosPorIdUsuario(usuarioLogado.getId(), pageable);
+        return pedidos.map(this::toPedidoResponseDTO);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<PedidoResponseDTO> buscarPedidosPorDono(Long idEstabelecimento, int pageNumber, int pageSize){
+        Usuario usuarioLogado = UsuarioAutenticadoService.getUsuarioAutenticado();
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<Pedido> pedidos = pedidoRepository.findPedidosByEstabelecimentoAndDono(idEstabelecimento, usuarioLogado.getId(), pageable);
+        return pedidos.map(this::toPedidoResponseDTO);
+    }
+
     private PedidoResponseDTO toPedidoResponseDTO(Pedido pedido) {
         PedidoResponseDTO dto = new PedidoResponseDTO();
         dto.setId(pedido.getId());
@@ -161,7 +180,8 @@ public class PedidoService {
                         r.getDataReserva(),
                         r.getStatus().name(),
                         r.getPrivacidade().getDescricao(),
-                        r.getLimiteParticipantesExternos()
+                        r.getLimiteParticipantesExternos(),
+                        r.getParticipantes().size()
                 ))
                 .toList()
         );

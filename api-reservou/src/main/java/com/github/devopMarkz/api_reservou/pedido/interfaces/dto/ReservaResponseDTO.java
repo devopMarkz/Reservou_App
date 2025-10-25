@@ -22,5 +22,6 @@ public class ReservaResponseDTO {
     private String status;
     private String privacidade;
     private Integer limiteParticipantesExternos;
+    private Integer quantidadeParticipantes;
 
 }

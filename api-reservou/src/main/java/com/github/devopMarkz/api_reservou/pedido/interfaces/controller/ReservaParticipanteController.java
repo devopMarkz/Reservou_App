@@ -31,7 +31,7 @@ public class ReservaParticipanteController {
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/admin/{usuarioId}")
+    @DeleteMapping("/{usuarioId}")
     @PreAuthorize(GerenciadorDePermissoes.ROLE_DONO)
     public ResponseEntity<Void> removerParticipante(@PathVariable Long reservaId, @PathVariable Long usuarioId) {
         reservaService.removerParticipanteAdmin(reservaId, usuarioId);

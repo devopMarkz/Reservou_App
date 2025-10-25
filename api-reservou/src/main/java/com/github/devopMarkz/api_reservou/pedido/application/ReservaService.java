@@ -41,6 +41,8 @@ public class ReservaService {
         }
 
         reserva.adicionarParticipante(usuarioLogado);
+
+        reservaRepository.save(reserva);
     }
 
     @Transactional
@@ -57,6 +59,8 @@ public class ReservaService {
         }
 
         reserva.removerParticipante(usuarioLogado);
+
+        reservaRepository.save(reserva);
     }
 
     @Transactional
