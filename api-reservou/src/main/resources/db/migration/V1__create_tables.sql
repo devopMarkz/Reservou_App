@@ -17,7 +17,7 @@ CREATE TABLE tb_estabelecimentos (
     descricao TEXT,
     telefone VARCHAR(20),
     ativo BOOLEAN NOT NULL DEFAULT TRUE,
-    url_foto VARCHAR(255),
+    url_foto TEXT,
     url_facebook VARCHAR(255),
     url_instagram VARCHAR(255),
     url_site VARCHAR(255),
@@ -42,7 +42,7 @@ CREATE TABLE tb_quadras (
     nome VARCHAR(255) NOT NULL,
     tipo VARCHAR(255),
     estabelecimento_id BIGINT NOT NULL,
-    url_foto VARCHAR(255),
+    url_foto TEXT,
     link_mapa_endereco VARCHAR(255),
     informacoes_gerais TEXT,
     ativo BOOLEAN NOT NULL DEFAULT TRUE,
@@ -130,4 +130,16 @@ CREATE TABLE tb_reserva_usuarios (
      REFERENCES tb_reservas(id) ON DELETE CASCADE,
     CONSTRAINT fk_ru_usuario FOREIGN KEY (usuario_id)
      REFERENCES tb_usuarios(id) ON DELETE CASCADE
+);
+
+-- TABELA DE UTENSÍLIOS (relacionado com as quadras)
+CREATE TABLE tb_quadras_utensilios (
+    id BIGSERIAL PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    valor DECIMAL(10, 2) NOT NULL,
+    alugado BOOLEAN DEFAULT FALSE,
+    url_foto TEXT,
+    quadra_id BIGINT NOT NULL,
+
+    CONSTRAINT fk_quadra FOREIGN KEY (quadra_id) REFERENCES tb_quadras(id) ON DELETE CASCADE
 );

@@ -52,6 +52,10 @@ public class Quadra implements Serializable {
     @OneToMany(mappedBy = "quadra", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Horario> horarios = new HashSet<>();
 
+    @Setter(AccessLevel.NONE)
+    @OneToMany(mappedBy = "quadra", orphanRemoval = true, cascade = CascadeType.ALL)
+    private Set<Utensilio> utensilios = new HashSet<>();
+
     public Quadra() {
     }
 
@@ -64,5 +68,9 @@ public class Quadra implements Serializable {
 
     public Set<Horario> getHorarios() {
         return Collections.unmodifiableSet(this.horarios);
+    }
+
+    public Set<Utensilio> getUtensilios() {
+        return Collections.unmodifiableSet(this.utensilios);
     }
 }
